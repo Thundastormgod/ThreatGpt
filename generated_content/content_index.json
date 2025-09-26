@@ -1,0 +1,18 @@
+{
+  "extraction_timestamp": "2025-09-26T15:55:22.461262",
+  "statistics": {
+    "total_files": 10,
+    "content_items": 14,
+    "scenarios": 0,
+    "phone_scripts": 0,
+    "email_templates": 1,
+    "training_materials": 13
+  },
+  "folders": {
+    "scenarios": "General threat scenarios and attack walkthroughs",
+    "phone_scripts": "Social engineering phone call scripts",
+    "email_templates": "Phishing and spear-phishing email examples",
+    "training_materials": "Security awareness training content",
+    "reports": "Analysis and summary reports"
+  }
+}
