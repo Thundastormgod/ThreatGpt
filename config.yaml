@@ -84,6 +84,30 @@ templates:
   cache_templates: true
   auto_reload: false
 
+# Dataset Configuration
+datasets:
+  storage_path: "~/.threatgpt/datasets"
+  enron:
+    enabled: true
+    description: "Enron email corpus for business communication patterns"
+    update_interval: "monthly"
+  phishtank:
+    enabled: true
+    description: "PhishTank database for phishing URL patterns"
+    update_interval: "weekly"
+  cert_insider:
+    enabled: true
+    description: "CERT insider threat database for behavioral patterns"
+    update_interval: "monthly"
+  lanl_auth:
+    enabled: true
+    description: "LANL authentication logs for network behavior analysis"
+    update_interval: "monthly"
+  mitre_attack:
+    enabled: true
+    description: "MITRE ATT&CK framework for tactics, techniques, and procedures"
+    update_interval: "weekly"
+
 # API Configuration
 api:
   host: "0.0.0.0"

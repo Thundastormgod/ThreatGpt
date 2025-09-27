@@ -33,9 +33,9 @@ class TestCLI:
     def test_templates_command(self):
         """Test templates command."""
         runner = CliRunner()
-        result = runner.invoke(cli, ["templates", "--list-all"])
+        result = runner.invoke(cli, ["templates", "list-all"])
         assert result.exit_code == 0
-        assert "Available threat scenario templates" in result.output
+        assert "Threat Scenario Templates" in result.output
     
     def test_status_command(self):
         """Test status command."""

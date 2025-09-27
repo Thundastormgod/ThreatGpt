@@ -396,6 +396,112 @@ class AnthropicProvider(BaseLLMProvider):
             )
 
 
+class OpenRouterProviderAdapter(BaseLLMProvider):
+    """Adapter for OpenRouter provider to work with the new provider interface."""
+    
+    def __init__(self, config: LLMProviderConfig):
+        super().__init__(config)
+        self.api_key = config.api_key
+        self.model = config.default_model.value
+        self.base_url = "https://openrouter.ai/api/v1"
+    
+    async def generate(self, request: LLMRequest) -> LLMResponse:
+        """Generate content using OpenRouter API."""
+        if not self.api_key:
+            return LLMResponse(
+                content="",
+                provider=self.config.provider.value,
+                model=self.model,
+                prompt_tokens=0,
+                completion_tokens=0,
+                total_tokens=0,
+                response_time_ms=0,
+                error="OpenRouter API key not configured",
+                error_code="missing_api_key"
+            )
+        
+        start_time = time.time()
+        
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "HTTP-Referer": "https://github.com/threatgpt/threatgpt",
+            "X-Title": "ThreatGPT",
+            "Content-Type": "application/json"
+        }
+        
+        messages = []
+        if request.system_prompt:
+            messages.append({"role": "system", "content": request.system_prompt})
+        messages.append({"role": "user", "content": request.user_prompt})
+        
+        payload = {
+            "model": self.model,
+            "messages": messages,
+            "max_tokens": request.max_tokens,
+            "temperature": request.temperature
+        }
+        
+        try:
+            response = await self.client.post(
+                f"{self.base_url}/chat/completions",
+                json=payload,
+                headers=headers
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                choice = data["choices"][0]
+                usage = data.get("usage", {})
+                
+                return LLMResponse(
+                    content=choice["message"]["content"],
+                    provider=self.config.provider.value,
+                    model=self.model,
+                    prompt_tokens=usage.get("prompt_tokens", 0),
+                    completion_tokens=usage.get("completion_tokens", 0),
+                    total_tokens=usage.get("total_tokens", 0),
+                    response_time_ms=int((time.time() - start_time) * 1000)
+                )
+            else:
+                error_data = response.json() if response.headers.get("content-type", "").startswith("application/json") else {}
+                error_msg = error_data.get("error", {}).get("message", f"HTTP {response.status_code}")
+                
+                return LLMResponse(
+                    content="",
+                    provider=self.config.provider.value,
+                    model=self.model,
+                    prompt_tokens=0,
+                    completion_tokens=0,
+                    total_tokens=0,
+                    response_time_ms=int((time.time() - start_time) * 1000),
+                    error=error_msg,
+                    error_code=f"http_{response.status_code}"
+                )
+                
+        except Exception as e:
+            return LLMResponse(
+                content="",
+                provider=self.config.provider.value,
+                model=self.model,
+                prompt_tokens=0,
+                completion_tokens=0,
+                total_tokens=0,
+                response_time_ms=int((time.time() - start_time) * 1000),
+                error=str(e),
+                error_code="request_failed"
+            )
+    
+    def estimate_tokens(self, text: str) -> int:
+        """Estimate token count for text."""
+        # Simple estimation: ~4 characters per token
+        return len(text) // 4
+    
+    def validate_model(self, model: LLMModel) -> bool:
+        """Check if model is supported by OpenRouter."""
+        # OpenRouter supports many models, so we'll accept most common ones
+        return True
+
+
 class LLMProviderManager:
     """Manager for multiple LLM providers with automatic routing."""
     
@@ -409,6 +515,9 @@ class LLMProviderManager:
             provider = OpenAIProvider(config)
         elif config.provider == LLMProvider.ANTHROPIC:
             provider = AnthropicProvider(config)
+        elif config.provider == LLMProvider.OPENROUTER:
+            # Create a simple OpenRouter provider for testing
+            provider = OpenRouterProviderAdapter(config)
         else:
             raise ValueError(f"Unsupported provider: {config.provider}")
         
@@ -451,5 +560,8 @@ class LLMProviderManager:
             return list(OpenAIProvider.SUPPORTED_MODELS)
         elif target_provider == LLMProvider.ANTHROPIC:
             return list(AnthropicProvider.SUPPORTED_MODELS)
+        elif target_provider == LLMProvider.OPENROUTER:
+            # OpenRouter supports many models - return common ones
+            return [LLMModel.GPT_35_TURBO, LLMModel.GPT_4, LLMModel.CLAUDE_3_HAIKU]
         else:
             return []

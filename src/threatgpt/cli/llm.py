@@ -68,6 +68,16 @@ def test_providers(openai_key: Optional[str], anthropic_key: Optional[str], open
             providers_configured += 1
             console.print("✅ Anthropic provider configured")
         
+        if openrouter_key:
+            config = LLMProviderConfig(
+                provider=LLMProvider.OPENROUTER,
+                api_key=openrouter_key,
+                default_model=LLMModel.GPT_35_TURBO,  # OpenRouter supports many models
+            )
+            provider_manager.add_provider(config, set_as_default=providers_configured == 0)
+            providers_configured += 1
+            console.print("✅ OpenRouter provider configured")
+        
         if providers_configured == 0:
             console.print("❌ No providers configured. Set OPENAI_API_KEY, ANTHROPIC_API_KEY, or OPENROUTER_API_KEY environment variables.")
             return
@@ -86,7 +96,7 @@ def test_providers(openai_key: Optional[str], anthropic_key: Optional[str], open
             
             try:
                 results = await generation_service.test_providers()
-                progress.complete_task(task)
+                progress.update(task, completed=True)
                 
                 # Display results
                 table = Table(title="Provider Test Results")

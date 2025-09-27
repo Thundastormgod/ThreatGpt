@@ -25,18 +25,33 @@ def datasets():
 @click.option(
     "--config-path",
     "-c", 
-    default="~/.threatgpt/config.yaml",
+    default="config.yaml",
     help="Path to configuration file"
 )
 @click.pass_context
 def list(ctx: click.Context, config_path: str):
     """List available cybersecurity datasets."""
     try:
-        config = {
-            'storage_path': Path('~/.threatgpt/datasets').expanduser()
-        }
+        # Try to load actual configuration
+        import yaml
         
-        manager = DatasetManager(config)
+        config_file = Path(config_path)
+        if config_file.exists():
+            with open(config_file, 'r') as f:
+                full_config = yaml.safe_load(f)
+                datasets_config = full_config.get('datasets', {})
+                datasets_config['storage_path'] = Path('~/.threatgpt/datasets').expanduser()
+        else:
+            datasets_config = {
+                'storage_path': Path('~/.threatgpt/datasets').expanduser(),
+                'enron': {'enabled': True},
+                'phishtank': {'enabled': True}, 
+                'cert_insider': {'enabled': True},
+                'lanl_auth': {'enabled': True},
+                'mitre_attack': {'enabled': True}
+            }
+        
+        manager = DatasetManager(datasets_config)
         
         # Run async initialization
         async def list_datasets():
@@ -86,11 +101,26 @@ def list(ctx: click.Context, config_path: str):
 def download(ctx: click.Context, dataset_type: str, force: bool):
     """Download and process a specific dataset."""
     try:
-        config = {
-            'storage_path': Path('~/.threatgpt/datasets').expanduser()
-        }
+        # Try to load actual configuration
+        import yaml
         
-        manager = DatasetManager(config)
+        config_file = Path('config.yaml')
+        if config_file.exists():
+            with open(config_file, 'r') as f:
+                full_config = yaml.safe_load(f)
+                datasets_config = full_config.get('datasets', {})
+                datasets_config['storage_path'] = Path('~/.threatgpt/datasets').expanduser()
+        else:
+            datasets_config = {
+                'storage_path': Path('~/.threatgpt/datasets').expanduser(),
+                'enron': {'enabled': True},
+                'phishtank': {'enabled': True}, 
+                'cert_insider': {'enabled': True},
+                'lanl_auth': {'enabled': True},
+                'mitre_attack': {'enabled': True}
+            }
+        
+        manager = DatasetManager(datasets_config)
         
         # Convert string to enum
         dataset_enum = DatasetType(dataset_type)
@@ -135,11 +165,26 @@ def download(ctx: click.Context, dataset_type: str, force: bool):
 def status(ctx: click.Context, format: str):
     """Show detailed status of all datasets."""
     try:
-        config = {
-            'storage_path': Path('~/.threatgpt/datasets').expanduser()
-        }
+        # Try to load actual configuration
+        import yaml
         
-        manager = DatasetManager(config)
+        config_file = Path('config.yaml')
+        if config_file.exists():
+            with open(config_file, 'r') as f:
+                full_config = yaml.safe_load(f)
+                datasets_config = full_config.get('datasets', {})
+                datasets_config['storage_path'] = Path('~/.threatgpt/datasets').expanduser()
+        else:
+            datasets_config = {
+                'storage_path': Path('~/.threatgpt/datasets').expanduser(),
+                'enron': {'enabled': True},
+                'phishtank': {'enabled': True}, 
+                'cert_insider': {'enabled': True},
+                'lanl_auth': {'enabled': True},
+                'mitre_attack': {'enabled': True}
+            }
+        
+        manager = DatasetManager(datasets_config)
         
         async def get_status():
             await manager.initialize_datasets()

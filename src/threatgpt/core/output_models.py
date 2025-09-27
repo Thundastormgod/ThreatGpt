@@ -7,7 +7,7 @@ that will be saved to log files, ensuring consistency and completeness.
 from datetime import datetime
 from typing import Dict, List, Optional, Any, Union
 from enum import Enum
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 import uuid
 
 
@@ -59,7 +59,8 @@ class ContentGeneration(BaseModel):
     educational_markers: List[str] = Field(default_factory=list, description="Educational indicators included")
     generated_at: datetime = Field(default_factory=datetime.utcnow, description="Generation timestamp")
     
-    @validator('content')
+    @field_validator('content')
+    @classmethod
     def content_not_empty(cls, v):
         if not v or not v.strip():
             raise ValueError("Generated content cannot be empty")
@@ -142,7 +143,8 @@ class SimulationOutput(BaseModel):
     # Environment information
     environment: Dict[str, str] = Field(default_factory=dict, description="Environment information")
     
-    @validator('simulation_id')
+    @field_validator('simulation_id')
+    @classmethod
     def validate_simulation_id(cls, v):
         try:
             uuid.UUID(v)
@@ -150,7 +152,8 @@ class SimulationOutput(BaseModel):
         except ValueError:
             raise ValueError("simulation_id must be a valid UUID")
     
-    @validator('generated_content')
+    @field_validator('generated_content')
+    @classmethod
     def at_least_one_content(cls, v):
         if not v:
             return v  # Allow empty for failed simulations

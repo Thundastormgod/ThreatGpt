@@ -13,6 +13,7 @@ from rich.tree import Tree
 from rich.syntax import Syntax
 
 from ..config.yaml_loader import YAMLConfigLoader, ConfigurationError, SchemaValidationError
+from ..core.template_manager_pro import TemplateCreationWizard, TemplateManager
 
 
 console = Console()
@@ -363,3 +364,292 @@ def copy(source_template: str, new_name: str, edit: bool):
             
     except Exception as e:
         console.print(f"[red]❌ Error copying template:[/red] {e}")
+
+
+@templates.command()
+def create():
+    """Create a new threat scenario template using the interactive wizard."""
+    console.print("[bold blue]🧙‍♂️ Starting Template Creation Wizard...[/bold blue]")
+    
+    templates_dir = Path(__file__).parent.parent.parent.parent / "templates"
+    wizard = TemplateCreationWizard(templates_dir)
+    
+    try:
+        result = wizard.create_template_interactive()
+        if result:
+            console.print(f"\n[bold green]🎉 Template successfully created: {result.name}[/bold green]")
+            
+            # Ask if user wants to validate the new template
+            if click.confirm("Validate the new template now?"):
+                loader = YAMLConfigLoader()
+                try:
+                    scenario = loader.load_and_validate_scenario(result)
+                    console.print("[green]✅ Template validation successful![/green]")
+                except Exception as e:
+                    console.print(f"[yellow]⚠️ Template validation failed: {e}[/yellow]")
+        else:
+            console.print("[yellow]Template creation cancelled or failed.[/yellow]")
+            
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Template creation cancelled by user.[/yellow]")
+    except Exception as e:
+        console.print(f"\n[red]❌ Error during template creation: {e}[/red]")
+
+
+@templates.command()
+@click.option('--auto-fix', '-f', is_flag=True, help='Automatically attempt to fix common issues')
+@click.option('--backup', '-b', is_flag=True, help='Create backup files before fixing')
+def validate_pro(auto_fix: bool, backup: bool):
+    """Professional validation with detailed diagnostics and auto-fix capabilities."""
+    console.print("[bold blue]🔍 Running Professional Template Validation...[/bold blue]")
+    
+    templates_dir = Path(__file__).parent.parent.parent.parent / "templates"
+    manager = TemplateManager(templates_dir)
+    
+    # Run comprehensive validation
+    results = manager.validate_all_templates()
+    
+    # Display professional summary
+    stats = results["statistics"]
+    console.print(f"\n[bold cyan]📊 Validation Report[/bold cyan]")
+    console.print(f"Total Templates: {stats['total']}")
+    console.print(f"Valid: [green]{stats['valid_count']}[/green] ({stats['valid_count']/stats['total']*100:.1f}%)" if stats['total'] > 0 else "Valid: 0")
+    console.print(f"Invalid: [red]{stats['invalid_count']}[/red] ({stats['invalid_count']/stats['total']*100:.1f}%)" if stats['total'] > 0 else "Invalid: 0")
+    
+    # Detailed results table
+    table = Table(title="Detailed Validation Results", show_header=True)
+    table.add_column("Template", style="cyan", no_wrap=True)
+    table.add_column("Status", justify="center")
+    table.add_column("Threat Type", style="yellow")
+    table.add_column("Difficulty", justify="center")
+    table.add_column("Issues", style="red")
+    
+    # Add valid templates
+    for valid in results["valid"]:
+        table.add_row(
+            valid["file"],
+            "[green]✅ Valid[/green]",
+            valid["threat_type"].replace('_', ' ').title(),
+            str(valid["difficulty"]),
+            "[green]None[/green]"
+        )
+    
+    # Add invalid templates
+    for invalid in results["invalid"]:
+        error_short = invalid["error"][:50] + "..." if len(invalid["error"]) > 50 else invalid["error"]
+        table.add_row(
+            invalid["file"],
+            "[red]❌ Invalid[/red]",
+            "Unknown",
+            "N/A",
+            error_short
+        )
+    
+    console.print(table)
+    
+    # Auto-fix invalid templates if requested
+    if auto_fix and results["invalid"]:
+        console.print(f"\n[bold yellow]🔧 Attempting to auto-fix {len(results['invalid'])} invalid templates...[/bold yellow]")
+        
+        fixed_count = 0
+        for invalid in results["invalid"]:
+            template_file = templates_dir / invalid["file"]
+            if template_file.exists():
+                if manager.fix_template_issues(template_file):
+                    fixed_count += 1
+        
+        console.print(f"\n[bold green]✅ Successfully fixed {fixed_count} templates![/bold green]")
+        
+        if fixed_count > 0:
+            console.print("[dim]Re-run validation to see updated results.[/dim]")
+
+
+@templates.command()
+@click.argument('source_template')
+@click.argument('new_name')
+def clone(source_template: str, new_name: str):
+    """Create a new template by cloning and customizing an existing one."""
+    console.print(f"[bold blue]📋 Cloning template '{source_template}' as '{new_name}'...[/bold blue]")
+    
+    templates_dir = Path(__file__).parent.parent.parent.parent / "templates"
+    manager = TemplateManager(templates_dir)
+    
+    try:
+        new_template_path = manager.create_from_template(source_template, new_name)
+        console.print(f"[green]✅ Template cloned successfully: {new_template_path.name}[/green]")
+        
+        # Display new template info
+        if click.confirm("View the cloned template?"):
+            from ..config.yaml_loader import YAMLConfigLoader
+            loader = YAMLConfigLoader()
+            config = loader.load_config(new_template_path)
+            _display_template_details(config, None, new_template_path)
+            
+    except FileNotFoundError as e:
+        console.print(f"[red]❌ {e}[/red]")
+    except Exception as e:
+        console.print(f"[red]❌ Error cloning template: {e}[/red]")
+
+
+@templates.command()
+def stats():
+    """Display comprehensive statistics about the template ecosystem."""
+    console.print("[bold blue]📈 Template Ecosystem Statistics[/bold blue]")
+    
+    templates_dir = Path(__file__).parent.parent.parent.parent / "templates"
+    manager = TemplateManager(templates_dir)
+    
+    # Get validation results for statistics
+    results = manager.validate_all_templates()
+    
+    if results["statistics"]["total"] == 0:
+        console.print("[yellow]No templates found in the templates directory.[/yellow]")
+        return
+    
+    # Overall statistics
+    stats = results["statistics"]
+    console.print(f"\n[bold cyan]📊 Overall Statistics[/bold cyan]")
+    console.print(f"Total Templates: {stats['total']}")
+    console.print(f"Valid Templates: [green]{stats['valid_count']}[/green]")
+    console.print(f"Invalid Templates: [red]{stats['invalid_count']}[/red]")
+    console.print(f"Success Rate: [cyan]{stats['success_rate']:.1%}[/cyan]")
+    
+    # Threat type distribution
+    threat_types = {}
+    difficulty_levels = {}
+    
+    for valid in results["valid"]:
+        threat_type = valid["threat_type"]
+        difficulty = valid["difficulty"]
+        
+        threat_types[threat_type] = threat_types.get(threat_type, 0) + 1
+        difficulty_levels[difficulty] = difficulty_levels.get(difficulty, 0) + 1
+    
+    # Threat types table
+    if threat_types:
+        table = Table(title="Threat Type Distribution", show_header=True)
+        table.add_column("Threat Type", style="cyan")
+        table.add_column("Count", justify="center")
+        table.add_column("Percentage", justify="center")
+        
+        for threat_type, count in sorted(threat_types.items()):
+            percentage = count / len(results["valid"]) * 100
+            table.add_row(
+                threat_type.replace('_', ' ').title(),
+                str(count),
+                f"{percentage:.1f}%"
+            )
+        
+        console.print(f"\n{table}")
+    
+    # Difficulty distribution
+    if difficulty_levels:
+        table = Table(title="Difficulty Level Distribution", show_header=True)
+        table.add_column("Difficulty Level", style="yellow")
+        table.add_column("Count", justify="center")
+        table.add_column("Percentage", justify="center")
+        
+        for difficulty, count in sorted(difficulty_levels.items()):
+            percentage = count / len(results["valid"]) * 100
+            table.add_row(
+                f"{difficulty}/10",
+                str(count),
+                f"{percentage:.1f}%"
+            )
+        
+        console.print(f"\n{table}")
+
+
+@templates.command()
+def health():
+    """Check the overall health of the template ecosystem."""
+    console.print("[bold blue]🏥 Template Ecosystem Health Check[/bold blue]")
+    
+    templates_dir = Path(__file__).parent.parent.parent.parent / "templates"
+    
+    if not templates_dir.exists():
+        console.print("[red]❌ Templates directory not found![/red]")
+        return
+    
+    manager = TemplateManager(templates_dir)
+    results = manager.validate_all_templates()
+    
+    # Health scoring
+    total_score = 0
+    max_score = 100
+    
+    # Validation success rate (40 points)
+    validation_score = results["statistics"]["success_rate"] * 40
+    total_score += validation_score
+    
+    # Template diversity (30 points)
+    threat_types = set()
+    for valid in results["valid"]:
+        threat_types.add(valid["threat_type"])
+    
+    diversity_score = min(len(threat_types) / 5, 1.0) * 30  # Max 5 different types
+    total_score += diversity_score
+    
+    # Template count (20 points)
+    count_score = min(results["statistics"]["total"] / 20, 1.0) * 20  # Max 20 templates
+    total_score += count_score
+    
+    # No critical errors (10 points)
+    critical_errors = len([inv for inv in results["invalid"] if "Schema validation failed" in inv["error"]])
+    error_penalty = critical_errors * 2  # -2 points per critical error
+    error_score = max(10 - error_penalty, 0)
+    total_score += error_score
+    
+    # Health status
+    if total_score >= 90:
+        health_status = "[bold green]Excellent[/bold green] 🎉"
+        health_color = "green"
+    elif total_score >= 75:
+        health_status = "[bold yellow]Good[/bold yellow] 👍"
+        health_color = "yellow"
+    elif total_score >= 60:
+        health_status = "[bold orange]Fair[/bold orange] ⚠️"
+        health_color = "orange"
+    else:
+        health_status = "[bold red]Poor[/bold red] 🚨"
+        health_color = "red"
+    
+    # Display health report
+    health_panel = Panel(
+        f"Overall Health Score: [bold {health_color}]{total_score:.1f}/100[/bold {health_color}]\n"
+        f"Status: {health_status}\n\n"
+        f"[dim]Breakdown:[/dim]\n"
+        f"• Validation Success: {validation_score:.1f}/40\n"
+        f"• Template Diversity: {diversity_score:.1f}/30\n"
+        f"• Template Count: {count_score:.1f}/20\n"
+        f"• Error-free Score: {error_score:.1f}/10",
+        title="🏥 Ecosystem Health Report",
+        border_style=health_color
+    )
+    
+    console.print(health_panel)
+    
+    # Recommendations
+    recommendations = []
+    
+    if validation_score < 30:
+        recommendations.append("• Fix invalid templates to improve validation success rate")
+    
+    if diversity_score < 20:
+        recommendations.append("• Create templates for more threat types (phishing, malware, social_engineering, etc.)")
+    
+    if count_score < 15:
+        recommendations.append("• Create more templates to expand the scenario library")
+    
+    if error_score < 8:
+        recommendations.append("• Review and fix schema validation errors in templates")
+    
+    if recommendations:
+        rec_panel = Panel(
+            "\n".join(recommendations),
+            title="🎯 Recommendations",
+            border_style="blue"
+        )
+        console.print(f"\n{rec_panel}")
+    else:
+        console.print("\n[green]✅ No major issues found. Template ecosystem is healthy![/green]")

@@ -1,3 +1,7 @@
+# ThreatGPT Threat Scenario Template
+# Auto-fixed on 2025-09-27T03:25:48.953679Z
+# Fixes applied: target_profile.seniority: set to valid value, target_profile.industry: set to valid value
+
 metadata:
   name: Custom Executive Attack
   description: Customized version of executive_phishing
@@ -20,10 +24,10 @@ threat_type: spear_phishing
 delivery_vector: email
 target_profile:
   role: Chief Executive Officer
-  seniority: c_level
+  seniority: mid
   department: executive
   technical_level: moderate
-  industry: financial_services
+  industry: technology
   company_size: enterprise
   typical_working_hours: 7:00-19:00 EST
   communication_style: formal_executive

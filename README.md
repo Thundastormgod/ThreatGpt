@@ -10,7 +10,7 @@ ThreatGPT is a production-grade cybersecurity threat simulation platform that le
 
 ## 🚀 Features
 
-- **Multi-LLM Support**: ✅ Integrates with OpenRouter, OpenAI GPT-4 and Anthropic Claude
+- **Multi-LLM Support**: ✅ Integrates with OpenAI GPT-4 and Anthropic Claude
 - **YAML-Based Configuration**: ✅ Define threat scenarios using intuitive YAML schemas  
 - **Production-Ready Core**: ✅ Scalable simulation engine with proper data models
 - **CLI Interface**: ✅ Command-line tool for scenario management and execution
@@ -50,8 +50,8 @@ ThreatGPT Platform
 
 ```bash
 # Clone the repository
-git clone https://github.com/Thundastormgod/ThreatGpt.git
-cd ThreatGpt
+git clone https://github.com/threatgpt/threatgpt.git
+cd threatgpt
 
 # Install with Poetry (recommended)
 poetry install
@@ -254,8 +254,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - **Documentation**: [https://threatgpt.readthedocs.io](https://threatgpt.readthedocs.io)
-- **Issues**: [GitHub Issues](https://github.com/Thundastormgod/ThreatGpt/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Thundastormgod/ThreatGpt/discussions)
+- **Issues**: [GitHub Issues](https://github.com/threatgpt/threatgpt/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/threatgpt/threatgpt/discussions)
 - **Email**: okino007@gmail.com
 
 ---

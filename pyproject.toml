@@ -9,9 +9,9 @@ description = "AI-Powered Threat Simulation Platform for Cybersecurity Training"
 authors = ["ThreatGPT Team <okino007@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/Thundastormgod/ThreatGpt"
-repository = "https://github.com/Thundastormgod/ThreatGpt"
-documentation = "https://github.com/Thundastormgod/ThreatGpt/wiki"
+homepage = "https://github.com/threatgpt/threatgpt"
+repository = "https://github.com/threatgpt/threatgpt"
+documentation = "https://threatgpt.readthedocs.io"
 keywords = ["cybersecurity", "threat-simulation", "ai", "llm", "red-team"]
 classifiers = [
     "Development Status :: 3 - Alpha",
