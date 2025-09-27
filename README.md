@@ -42,45 +42,93 @@ ThreatGPT Platform
 ### Prerequisites
 
 - Python 3.11 or higher
-- Poetry (recommended) or pip
-- Redis (for caching)
-- PostgreSQL (for data persistence)
+- Git (for cloning the repository)
+- An OpenRouter API key or other supported LLM provider credentials
 
-### Installation
+### Installation & Setup
 
+#### Step 1: Clone the Repository
 ```bash
-# Clone the repository
-git clone https://github.com/threatgpt/threatgpt.git
-cd threatgpt
+git clone https://github.com/Thundastormgod/ThreatGpt.git
+cd ThreatGpt
+```
 
-# Install with Poetry (recommended)
-poetry install
+#### Step 2: Create Virtual Environment
+**Windows (PowerShell):**
+```bash
+# Create virtual environment
+python -m venv .venv
 
-# Or install with pip
-pip install -e .
+# Activate virtual environment
+.\.venv\Scripts\Activate.ps1
+```
 
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your API keys and configuration
+**macOS/Linux:**
+```bash
+# Create virtual environment
+python -m venv .venv
+
+# Activate virtual environment
+source .venv/bin/activate
+```
+
+#### Step 3: Install Dependencies
+```bash
+# Install required packages
+pip install -r requirements.txt
+
+# For development (optional)
+pip install -r requirements-dev.txt
+```
+
+#### Step 4: Configure API Keys
+```bash
+# Copy example configuration
+cp config.yaml.example config.yaml
+
+# Edit config.yaml with your API credentials
+# Or set environment variables for your LLM provider
+```
+
+#### Step 5: Verify Installation
+```bash
+# Check if threatgpt command is available
+threatgpt --help
+
+# Validate a template to ensure everything works
+threatgpt templates show executive_phishing --validate
 ```
 
 ### Basic Usage
 
-```bash
-# Activate virtual environment (if using Poetry)
-poetry shell
+**⚠️ Important: Always activate the virtual environment first!**
 
-# Run a simple phishing simulation
-threatgpt simulate --scenario my_scenario.yaml
+```bash
+# Windows PowerShell
+.\.venv\Scripts\Activate.ps1
+
+# macOS/Linux
+source .venv/bin/activate
+
+# Now you can use threatgpt commands:
 
 # List available threat templates
-threatgpt templates --list
+threatgpt templates list
 
-# Validate a configuration file
-threatgpt validate --config my_scenario.yaml
+# Validate a template
+threatgpt templates show executive_phishing --validate
 
-# Generate content directly
-threatgpt llm generate --prompt "Create a phishing email" --type phishing
+# Run a threat simulation (with proper file path)
+threatgpt simulate -s templates/executive_phishing.yaml
+
+# Test simulation without API calls (dry run)
+threatgpt simulate -s templates/executive_phishing.yaml --dry-run
+
+# Validate all templates at once
+threatgpt templates validate-all
+
+# Get template ecosystem health status
+threatgpt templates health
 ```
 
 ### Direct API Usage
@@ -167,7 +215,75 @@ pytest -m e2e          # End-to-end tests only
 pytest --cov=src/threatgpt --cov-report=html --cov-report=term
 ```
 
-## 🚢 Deployment
+## � Troubleshooting
+
+### Common Setup Issues
+
+#### ❌ "threatgpt: command not found"
+**Solution:** Activate the virtual environment first
+```bash
+# Windows
+.\.venv\Scripts\Activate.ps1
+
+# macOS/Linux
+source .venv/bin/activate
+```
+
+#### ❌ "Configuration file not found" when running simulations
+**Solution:** Use full path from project root
+```bash
+# ✅ Correct
+threatgpt simulate -s templates/my_template.yaml
+
+# ❌ Incorrect
+threatgpt simulate -s my_template.yaml
+```
+
+#### ❌ Template validation errors
+**Solution:** Use the professional template management system
+```bash
+# Check what's wrong
+threatgpt templates show my_template --validate
+
+# Auto-fix common issues
+threatgpt templates fix my_template
+
+# Fix all templates
+threatgpt templates fix-all
+```
+
+#### ❌ API authentication errors (401, 403)
+**Solution:** Configure your LLM provider credentials
+```bash
+# Check current configuration
+threatgpt config show
+
+# Set OpenRouter API key
+threatgpt config set openrouter.api_key "your-api-key-here"
+
+# Or use dry-run mode to test without API calls
+threatgpt simulate -s templates/my_template.yaml --dry-run
+```
+
+#### ❌ ModuleNotFoundError or ImportError
+**Solution:** Ensure requirements are installed in the virtual environment
+```bash
+# Activate virtual environment first
+.\.venv\Scripts\Activate.ps1  # Windows
+source .venv/bin/activate     # macOS/Linux
+
+# Reinstall requirements
+pip install -r requirements.txt
+```
+
+### Getting Help
+
+- **Check logs**: Look in `logs/` directory for detailed error information
+- **Validate templates**: Use `threatgpt templates validate-all` for health check
+- **Test configuration**: Use `threatgpt config show` to verify settings
+- **Dry run**: Use `--dry-run` flag to test without making API calls
+
+## �🚢 Deployment
 
 ### Docker Deployment
 
