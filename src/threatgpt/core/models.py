@@ -145,29 +145,8 @@ class SimulationResult:
             self.total_duration_seconds = (self.end_time - self.start_time).total_seconds()
 
 
-class ThreatGPTError(Exception):
-    """Base exception for ThreatGPT errors."""
-    pass
-
-
-class SimulationError(ThreatGPTError):
-    """Exception raised during simulation execution."""
-    def __init__(self, message: str, scenario_id: Optional[str] = None, stage_type: Optional[str] = None):
-        super().__init__(message)
-        self.scenario_id = scenario_id
-        self.stage_type = stage_type
-
-
-class ConfigurationError(ThreatGPTError):
-    """Exception raised for configuration-related errors."""
-    pass
-
-
-class LLMProviderError(ThreatGPTError):
-    """Exception raised for LLM provider-related errors."""
-    def __init__(self, message: str, provider_name: Optional[str] = None):
-        super().__init__(message)
-        self.provider_name = provider_name
+# Import exception classes from exceptions module to avoid duplication
+from .exceptions import ThreatGPTError, SimulationError, ConfigurationError, ValidationError
 
 
 # Type aliases for convenience

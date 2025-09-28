@@ -5,7 +5,7 @@ import os
 import logging
 from pathlib import Path
 from typing import Optional
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import click
 from rich.console import Console
@@ -213,6 +213,7 @@ def simulate(
             SimulationMetrics, QualityAssessment, ContentGeneration,
             ProviderInfo, ContentType, SimulationStatus, OutputFormat
         )
+        from ..utils.auto_content_saver import save_content_automatically
         
         # Convert YAML scenario to core model
         core_scenario = CoreThreatScenario.from_yaml_config(scenario_config)
@@ -243,9 +244,25 @@ def simulate(
         
         llm_manager = LLMManager(config=llm_config)
         
-        # Check if LLM is available
+        # Check LLM provider status and test connection
         if not llm_manager.is_available():
-            console.print("[yellow]⚠️  No LLM provider configured. Using fallback content generation.[/yellow]")
+            console.print("[red]❌ No LLM provider configured. Simulation will use fallback content only.[/red]")
+        else:
+            # Test connection to verify real AI responses
+            console.print("[blue]🔍 Testing LLM provider connection...[/blue]")
+            
+            import asyncio
+            test_result = asyncio.run(llm_manager.test_connection())
+            
+            if test_result["status"] == "success":
+                is_real_ai = test_result.get("is_real_ai", False)
+                if is_real_ai:
+                    console.print(f"[green]✅ Real AI connection verified with {test_result['provider']}[/green]")
+                else:
+                    console.print(f"[yellow]⚠️  {test_result['provider']} using mock/simulated responses[/yellow]")
+            else:
+                console.print(f"[red]❌ LLM connection failed: {test_result.get('error', 'Unknown error')}[/red]")
+                console.print("[yellow]⚠️  Simulation will use fallback content.[/yellow]")
         
         # Initialize simulator
         sim_params = scenario_config.simulation_parameters
@@ -325,6 +342,19 @@ def simulate(
                     )
                 )
                 simulation_output.generated_content.append(content_gen)
+        
+        # Auto-save generated content to organized folders
+        try:
+            saved_content_files = save_content_automatically(simulation_output.to_dict())
+            if saved_content_files:
+                console.print(f"[green]📁 Auto-saved {len(saved_content_files)} content item(s) to generated_content/[/green]")
+                for file_path in saved_content_files:
+                    console.print(f"   → {file_path}")
+        except Exception as e:
+            console.print(f"[yellow]⚠️  Auto-save warning: {str(e)}[/yellow]")
+            import logging
+            logger_warn = logging.getLogger(__name__)
+            logger_warn.warning(f"Auto content save failed: {e}")
         
         # Save to file using simulation logger
         logger = SimulationLogger()

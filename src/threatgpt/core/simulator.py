@@ -171,29 +171,8 @@ class ThreatSimulator:
                 logger.warning("No LLM provider available, using fallback content")
                 return self._generate_fallback_content(scenario, stage_type, description)
             
-            # Create detailed prompt for stage content generation
-            prompt = f"""
-Generate detailed educational content for a cybersecurity training simulation.
-
-Scenario Details:
-- Name: {scenario.name}
-- Threat Type: {scenario.threat_type.value if hasattr(scenario.threat_type, 'value') else scenario.threat_type}
-- Description: {scenario.description}
-
-Current Stage:
-- Stage Type: {stage_type}
-- Description: {description}
-
-Requirements:
-1. Create realistic but educational content
-2. Focus on detection and prevention techniques
-3. Include specific indicators of compromise (IoCs)
-4. Provide defensive recommendations
-5. Use placeholder data for sensitive information
-6. Keep content appropriate for security training
-
-Generate comprehensive content for this simulation stage:
-"""
+            # Create detailed prompt for actual scenario sample generation
+            prompt = self._create_scenario_generation_prompt(scenario, stage_type, description)
             
             # Generate content using LLM manager
             response = await self.llm_provider.generate_content(
@@ -213,6 +192,155 @@ Generate comprehensive content for this simulation stage:
         except Exception as e:
             logger.error(f"LLM content generation failed for stage {stage_type}: {str(e)}")
             return self._generate_fallback_content(scenario, stage_type, description)
+    
+    def _create_scenario_generation_prompt(self, scenario: ThreatScenario, stage_type: str, description: str) -> str:
+        """Create stage-specific prompts for generating actual threat scenario samples."""
+        threat_type = scenario.threat_type.value if hasattr(scenario.threat_type, 'value') else str(scenario.threat_type)
+        
+        # Base context for all prompts
+        base_context = f"""
+Scenario: {scenario.name}
+Threat Type: {threat_type}
+Description: {scenario.description}
+Stage: {stage_type} - {description}
+"""
+        
+        # Generate different content based on stage type and threat type
+        if stage_type == "reconnaissance":
+            return self._create_reconnaissance_prompt(scenario, base_context)
+        elif stage_type == "attack_planning":
+            return self._create_attack_planning_prompt(scenario, base_context)
+        elif threat_type in ["phishing", "spear_phishing", "sms_phishing"]:
+            return self._create_phishing_sample_prompt(scenario, base_context, stage_type)
+        elif threat_type in ["social_engineering", "vishing"]:
+            return self._create_social_engineering_prompt(scenario, base_context, stage_type)
+        elif threat_type in ["bec", "business_email_compromise"]:
+            return self._create_bec_sample_prompt(scenario, base_context, stage_type)
+        else:
+            return self._create_generic_scenario_prompt(scenario, base_context, stage_type)
+    
+    def _create_phishing_sample_prompt(self, scenario: ThreatScenario, base_context: str, stage_type: str) -> str:
+        """Generate actual phishing email samples."""
+        threat_type = scenario.threat_type.value if hasattr(scenario.threat_type, 'value') else str(scenario.threat_type)
+        
+        if "sms" in threat_type.lower():
+            return f"""{base_context}
+
+Generate a realistic SMS phishing message sample that demonstrates this threat scenario.
+
+Requirements:
+- Create an actual SMS text message that could be sent to the target
+- Use realistic urgency and social engineering tactics
+- Include believable but fake URLs (use example.com domains)
+- Make it specific to the target profile and industry
+- Use professional language appropriate for the target
+- Include psychological triggers that would make someone click
+- Keep message length appropriate for SMS (160-300 characters)
+
+Generate the SMS message content:"""
+        else:
+            return f"""{base_context}
+
+Generate a realistic phishing email sample that demonstrates this threat scenario.
+
+Requirements:
+- Create an actual email that could be sent to the target (Subject line, From, Body)
+- Use realistic social engineering tactics and urgency
+- Include believable but fake sender addresses and URLs (use example.com domains)
+- Make it specific to the target profile, role, and industry context
+- Use appropriate professional language and formatting
+- Include psychological triggers and call-to-action
+- Add realistic email signatures and branding elements
+
+Generate the complete email sample:"""
+    
+    def _create_social_engineering_prompt(self, scenario: ThreatScenario, base_context: str, stage_type: str) -> str:
+        """Generate social engineering script samples."""
+        return f"""{base_context}
+
+Generate a realistic social engineering phone script sample for this threat scenario.
+
+Requirements:
+- Create an actual phone conversation script that could be used
+- Include both caller lines and expected target responses
+- Use realistic pretexts and authority/urgency tactics
+- Make it specific to the target's role and industry
+- Include techniques to build rapport and trust
+- Add realistic company/service impersonation details
+- Include methods to extract information or gain access
+- Show how to handle common objections or questions
+
+Generate the phone script sample:"""
+    
+    def _create_bec_sample_prompt(self, scenario: ThreatScenario, base_context: str, stage_type: str) -> str:
+        """Generate BEC (Business Email Compromise) samples."""
+        return f"""{base_context}
+
+Generate a realistic BEC (Business Email Compromise) email sample for this threat scenario.
+
+Requirements:
+- Create an actual email that impersonates a high-level executive or trusted vendor
+- Use realistic business language and urgent financial requests
+- Include believable but fake executive names and company details
+- Make it specific to the target's industry and business context
+- Use professional formatting and appropriate tone
+- Include psychological pressure and time constraints
+- Add realistic financial transaction details (use fake account numbers)
+- Show techniques to bypass scrutiny and verification
+
+Generate the BEC email sample:"""
+    
+    def _create_reconnaissance_prompt(self, scenario: ThreatScenario, base_context: str) -> str:
+        """Generate reconnaissance activity samples."""
+        return f"""{base_context}
+
+Generate realistic reconnaissance activities and information gathering samples for this threat scenario.
+
+Requirements:
+- Create actual examples of information that would be gathered about the target
+- Show specific OSINT sources and techniques that would be used
+- Include realistic but fake target information and company details
+- Demonstrate how collected information would be used for the attack
+- Show social media, website, and public record research examples
+- Include timing and targeting strategies
+- Add realistic target profiling and attack preparation steps
+
+Generate the reconnaissance sample:"""
+    
+    def _create_attack_planning_prompt(self, scenario: ThreatScenario, base_context: str) -> str:
+        """Generate attack planning samples."""
+        return f"""{base_context}
+
+Generate a realistic attack execution plan sample for this threat scenario.
+
+Requirements:
+- Create an actual step-by-step attack plan that could be followed
+- Include specific timing, methods, and resources needed
+- Show realistic but fake infrastructure setup (domains, servers, etc.)
+- Demonstrate attack flow and decision points
+- Include contingency plans and backup methods
+- Add realistic success metrics and goals
+- Show how to maintain persistence and avoid detection
+- Include exit strategies and cleanup procedures
+
+Generate the attack plan sample:"""
+    
+    def _create_generic_scenario_prompt(self, scenario: ThreatScenario, base_context: str, stage_type: str) -> str:
+        """Generate generic threat scenario samples."""
+        return f"""{base_context}
+
+Generate a realistic threat scenario sample that demonstrates this specific attack type.
+
+Requirements:
+- Create actual content that could be used in this type of attack
+- Use realistic tactics, techniques, and procedures (TTPs)
+- Include believable but fake details appropriate for the threat type
+- Make it specific to the target profile and industry context
+- Show realistic attack methods and social engineering approaches
+- Include appropriate technical details and execution steps
+- Add realistic timing and delivery mechanisms
+
+Generate the scenario sample:"""
     
     def _generate_fallback_content(self, scenario: ThreatScenario, stage_type: str, description: str) -> str:
         """Generate fallback content when LLM is unavailable."""

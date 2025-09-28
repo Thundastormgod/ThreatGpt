@@ -42,6 +42,20 @@ Each template showcases different aspects of the YAML schema:
 - **Simulation Parameters**: Adaptive execution controls
 - **Compliance Controls**: Audit logging and content filtering
 
+## 🚀 Creating Your Own Templates
+
+### Quick Start
+1. **Copy Sample Template**: `cp templates/sample_phishing_template.yaml templates/my_template.yaml`
+2. **Modify for Your Needs**: Edit the required fields
+3. **Validate**: `threatgpt simulate --dry-run -s templates/my_template.yaml`
+4. **Test**: `threatgpt simulate -s templates/my_template.yaml`
+
+### Documentation
+- **📋 TEMPLATE_CREATION_GUIDE.md** - Complete template creation guide with examples
+- **📝 TEMPLATE_QUICK_REFERENCE.md** - Quick reference card for fast template creation
+- **📖 TEMPLATE_MANUAL.md** - Comprehensive 950+ line technical manual
+- **🎯 sample_phishing_template.yaml** - Ready-to-copy sample template
+
 ## Best Practices
 
 - Start with simpler scenarios and gradually increase complexity

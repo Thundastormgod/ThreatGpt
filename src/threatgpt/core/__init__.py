@@ -12,9 +12,11 @@ from threatgpt.core.models import (
 )
 from threatgpt.core.simulator import ThreatSimulator
 from threatgpt.core.exceptions import (
+    ThreatGPTError,
     SimulationError,
     ConfigurationError,
     ValidationError,
+    LLMProviderError,
 )
 
 __all__ = [
@@ -23,7 +25,9 @@ __all__ = [
     "SimulationStatus",
     "SimulationStage",
     "ThreatSimulator",
+    "ThreatGPTError",
     "SimulationError",
     "ConfigurationError",
     "ValidationError",
+    "LLMProviderError",
 ]

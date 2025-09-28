@@ -8,13 +8,19 @@ metadata:
   author: "Healthcare Security Team"
   tags: ["healthcare", "hipaa", "medical", "variable", "data_breach"]
 
-threat_type: "healthcare_targeted_attack"
+threat_type: "spear_phishing"
 delivery_vector: "email"
+difficulty_level: 7
+estimated_duration: 45
 
 # Healthcare-Specific Target Variability
 target_profile:
   role: "{VARIABLE:physician,nurse,administrator,it_staff,billing_specialist}"
-  department: "{VARIABLE:emergency,surgery,oncology,pediatrics,radiology,administration}"
+  department: "healthcare"
+  seniority: "mid"
+  technical_level: "moderate"
+  security_awareness_level: 6
+  industry: "healthcare"
   shift_pattern: "{VARIABLE:day_shift,night_shift,rotating,on_call}"
   patient_load: "{VARIABLE:light,moderate,heavy,critical}"
   
@@ -33,29 +39,21 @@ target_profile:
 behavioral_pattern:
   # Healthcare-specific psychological triggers
   psychological_triggers:
-    primary: "patient_safety"  # Most effective in healthcare
-    secondary: "{VARIABLE:regulatory_compliance,medical_emergency,colleague_request}"
-    urgency_multipliers:
-      - "patient_deterioration"
-      - "regulatory_deadline" 
-      - "insurance_authorization"
-      - "surgery_scheduling"
+    - "patient_safety"
+    - "regulatory_compliance"
+    - "medical_emergency"
+    - "colleague_request"
+    - "patient_deterioration"
+    - "regulatory_deadline"
   
   # Medical context social engineering
   social_engineering_tactics:
-    medical_pretexts:
-      - name: "urgent_patient_transfer"
-        effectiveness: "{RANGE:0.7-0.9}"
-        context: "Emergency patient needs immediate record access"
-      - name: "insurance_authorization"
-        effectiveness: "{RANGE:0.6-0.8}"
-        context: "Time-sensitive insurance approval required"
-      - name: "joint_commission_audit"
-        effectiveness: "{RANGE:0.8-0.95}"
-        context: "Regulatory compliance documentation needed"
-      - name: "physician_credentials"
-        effectiveness: "{RANGE:0.5-0.7}"
-        context: "Medical staff credentialing verification"
+    - "urgent_patient_transfer"
+    - "insurance_authorization"
+    - "joint_commission_audit"
+    - "physician_credentials"
+    - "medical_emergency_context"
+    - "hipaa_compliance_verification"
 
 # Advanced Healthcare Simulation Parameters
 simulation_parameters:
@@ -79,24 +77,27 @@ simulation_parameters:
     # Variable medical scenarios for content richness
     clinical_contexts:
       emergency_scenarios:
-        - "cardiac_arrest_patient"
-        - "trauma_admission"
-        - "stroke_protocol"
-        - "sepsis_alert"
+        scenarios:
+          - "cardiac_arrest_patient"
+          - "trauma_admission"
+          - "stroke_protocol"
+          - "sepsis_alert"
         probability: 0.4
         
       routine_clinical:
-        - "discharge_planning"
-        - "insurance_authorization"
-        - "lab_result_inquiry"
-        - "medication_reconciliation"
+        scenarios:
+          - "discharge_planning"
+          - "insurance_authorization"
+          - "lab_result_inquiry"
+          - "medication_reconciliation"
         probability: 0.3
         
       administrative:
-        - "credentialing_update"
-        - "quality_metrics_reporting"
-        - "regulatory_compliance"
-        - "audit_preparation"
+        scenarios:
+          - "credentialing_update"
+          - "quality_metrics_reporting"
+          - "regulatory_compliance"
+          - "audit_preparation"
         probability: 0.3
 
 # Custom Healthcare Attack Vectors
@@ -154,52 +155,26 @@ custom_parameters:
   # Variable patient scenarios for realism
   patient_contexts:
     high_profile_patients:
-      - "local_politician_family"
-      - "hospital_board_member"
-      - "medical_staff_child"
-      - "media_figure"
+      cases:
+        - "local_politician_family"
+        - "hospital_board_member"
+        - "medical_staff_child"
+        - "media_figure"
       urgency_multiplier: 1.5
       
     complex_medical_cases:
-      - "multi_organ_transplant"
-      - "rare_disease_diagnosis"
-      - "pediatric_emergency"
-      - "pregnancy_complications"
+      cases:
+        - "multi_organ_transplant"
+        - "rare_disease_diagnosis"
+        - "pediatric_emergency"
+        - "pregnancy_complications"
       clinical_urgency: 1.8
       
     regulatory_sensitive:
-      - "workman_comp_case"
-      - "legal_hold_patient"
-      - "research_participant"
-      - "psychiatric_hold"
+      cases:
+        - "workman_comp_case"
+        - "legal_hold_patient"
+        - "research_participant"
+        - "psychiatric_hold"
       compliance_pressure: 2.0
 
-# Healthcare-Specific Success Metrics
-success_metrics:
-  medical_realism:
-    clinical_accuracy: "{RANGE:0.8-1.0}"
-    medical_terminology_usage: "{RANGE:0.7-0.9}"
-    workflow_authenticity: "{RANGE:0.8-1.0}"
-    
-  hipaa_awareness_testing:
-    privacy_rule_references: true
-    security_rule_applications: true
-    breach_notification_scenarios: true
-    
-  healthcare_vulnerability_identification:
-    shift_change_exploitation: "measure_timing_effectiveness"
-    medical_emergency_pressure: "measure_urgency_response" 
-    colleague_trust_abuse: "measure_internal_trust_exploitation"
-
-# Compliance (Extra Important in Healthcare)
-compliance_controls:
-  hipaa_compliance:
-    no_real_patient_data: true
-    synthetic_medical_scenarios: true
-    privacy_training_integration: true
-    
-  educational_outcomes:
-    hipaa_awareness_improvement: true
-    phishing_recognition_in_medical_context: true
-    emergency_verification_procedures: true
-    colleague_authentication_protocols: true

@@ -46,25 +46,47 @@ class AnthropicProvider(BaseLLMProvider):
             LLMResponse with generated content
         """
         try:
-            # For now, simulate Anthropic API call
-            # In production, use actual Anthropic SDK
+            # Try to use actual Anthropic API if available
+            if self.api_key:
+                try:
+                    import anthropic
+                    
+                    client = anthropic.Anthropic(api_key=self.api_key)
+                    response = await asyncio.to_thread(
+                        client.messages.create,
+                        model=self.model,
+                        max_tokens=max_tokens,
+                        temperature=temperature,
+                        messages=[{"role": "user", "content": prompt}]
+                    )
+                    
+                    content = response.content[0].text
+                    
+                    llm_response = LLMResponse(content, provider="anthropic", model=self.model)
+                    llm_response.is_real_ai = True
+                    llm_response.usage = {
+                        "input_tokens": response.usage.input_tokens,
+                        "output_tokens": response.usage.output_tokens
+                    }
+                    
+                    logger.info(f"✅ Real Anthropic API response received: {len(content)} chars")
+                    return llm_response
+                    
+                except ImportError:
+                    logger.warning("Anthropic SDK not installed, falling back to mock content")
+                except Exception as api_error:
+                    logger.warning(f"Anthropic API failed: {api_error}, falling back to mock content")
+            
+            # Fallback to mock content if API not available
+            logger.info("Using mock Anthropic content (API not available)")
             await asyncio.sleep(0.7)  # Simulate API latency
             
-            # Mock response generation
             content = self._generate_mock_content(prompt, max_tokens)
             
-            return LLMResponse(
-                content=content,
-                provider="anthropic",
-                model=self.model,
-                tokens_used=min(len(content.split()), max_tokens),
-                timestamp=datetime.utcnow(),
-                metadata={
-                    "temperature": temperature,
-                    "max_tokens": max_tokens,
-                    "prompt_length": len(prompt)
-                }
-            )
+            llm_response = LLMResponse(content, provider="anthropic", model=self.model)
+            llm_response.is_real_ai = False  # Mark as mock content
+            
+            return llm_response
             
         except Exception as e:
             logger.error(f"Anthropic content generation failed: {e}")

@@ -94,27 +94,48 @@ class LLMManager:
         enhanced_prompt = self._enhance_prompt_with_safety(prompt, scenario_type)
         
         try:
-            logger.debug(f"Generating content with {type(provider).__name__}")
+            provider_name = type(provider).__name__
+            logger.info(f"🤖 Attempting to generate content with {provider_name}")
+            logger.info(f"📝 Prompt length: {len(enhanced_prompt)} characters")
+            logger.info(f"🎯 Scenario type: {scenario_type}")
+            
             response = await provider.generate_content(
                 prompt=enhanced_prompt,
                 max_tokens=max_tokens,
                 temperature=temperature
             )
             
-            # Validate and sanitize response
-            response = self._validate_response(response, scenario_type)
-            
-            logger.info(f"Content generated successfully: {len(response.content)} characters")
-            return response
+            # Check if this is a real API response or mock content
+            if response and hasattr(response, 'provider') and response.provider != "fallback":
+                logger.info(f"✅ Real AI content generated from {response.provider}")
+                logger.info(f"📊 Content length: {len(response.content)} characters")
+                logger.info(f"🤖 Model used: {getattr(response, 'model', 'unknown')}")
+                
+                # Validate and sanitize response
+                response = self._validate_response(response, scenario_type)
+                response.is_real_ai = True
+                return response
+            else:
+                logger.warning(f"⚠️  Received mock/simulated content from {provider_name}")
+                if response:
+                    response.is_real_ai = False
+                    return response
+                else:
+                    raise RuntimeError("Provider returned None response")
             
         except Exception as e:
-            logger.error(f"Content generation failed: {e}")
-            # Return fallback content instead of failing completely
-            fallback_response = LLMResponse(f"[Content generation unavailable: {scenario_type} scenario]")
+            logger.error(f"❌ Content generation failed with {type(provider).__name__}: {str(e)}")
+            logger.error(f"🔄 Returning fallback content for {scenario_type} scenario")
+            
+            # Create clear fallback response
+            fallback_response = LLMResponse(
+                content=f"[FALLBACK CONTENT] Unable to generate real AI content for {scenario_type} scenario. Error: {str(e)}"
+            )
             fallback_response.provider = "fallback"
             fallback_response.model = "none"
             fallback_response.error = str(e)
             fallback_response.scenario_type = scenario_type
+            fallback_response.is_real_ai = False
             return fallback_response
     
     def _get_provider(self, provider_name: Optional[str] = None) -> Optional[BaseLLMProvider]:
@@ -149,18 +170,28 @@ User Request:
         """Validate and sanitize LLM response."""
         # Basic content validation
         if not response.content or len(response.content.strip()) < 10:
+            logger.warning(f"⚠️  Received insufficient content (length: {len(response.content if response.content else 'None')})")
             response.content = f"[Insufficient content generated for {scenario_type} scenario]"
+            response.is_real_ai = False
+        
+        # Log content type and quality
+        is_fallback = response.content.startswith("[FALLBACK") or response.content.startswith("[Content generation unavailable")
+        if is_fallback:
+            logger.warning("⚠️  Response contains fallback content")
+            response.is_real_ai = False
         
         # Add safety metadata as attributes if metadata doesn't exist
         if hasattr(response, 'metadata') and response.metadata:
             response.metadata["safety_validated"] = True
             response.metadata["scenario_type"] = scenario_type
             response.metadata["validation_timestamp"] = datetime.utcnow().isoformat()
+            response.metadata["is_real_ai"] = getattr(response, 'is_real_ai', False)
         else:
             # Simple LLMResponse - add as attributes
             response.safety_validated = True
             response.scenario_type = scenario_type
             response.validation_timestamp = datetime.utcnow().isoformat()
+            response.is_real_ai = getattr(response, 'is_real_ai', False)
         
         return response
     
@@ -194,29 +225,76 @@ User Request:
         """Check if any LLM provider is available."""
         return bool(self.provider or self._providers)
     
+    def get_provider_status(self) -> Dict[str, Any]:
+        """Get detailed status of all providers."""
+        status = {
+            "total_providers": len(self._providers),
+            "available_providers": [],
+            "unavailable_providers": [],
+            "current_provider": None
+        }
+        
+        for name, provider in self._providers.items():
+            provider_info = {
+                "name": name,
+                "class": type(provider).__name__,
+                "available": provider.is_available() if hasattr(provider, 'is_available') else True,
+                "has_api_key": bool(getattr(provider, 'api_key', None))
+            }
+            
+            if provider_info["available"]:
+                status["available_providers"].append(provider_info)
+            else:
+                status["unavailable_providers"].append(provider_info)
+        
+        if self.provider:
+            status["current_provider"] = {
+                "name": type(self.provider).__name__,
+                "available": self.provider.is_available() if hasattr(self.provider, 'is_available') else True
+            }
+        
+        return status
+    
     async def test_connection(self, provider_name: Optional[str] = None) -> Dict[str, Any]:
-        """Test connection to LLM provider."""
+        """Test connection to LLM provider with real/mock detection."""
         provider = self._get_provider(provider_name)
         if not provider:
             return {"status": "error", "message": "No provider available"}
         
+        provider_class_name = type(provider).__name__
+        logger.info(f"🧪 Testing connection to {provider_class_name}...")
+        
         try:
             test_response = await provider.generate_content(
-                prompt="Hello, this is a connection test.",
-                max_tokens=10
+                prompt="Hello, this is a connection test. Please respond with 'Connection successful'.",
+                max_tokens=50
             )
             
-            return {
+            is_real_ai = getattr(test_response, 'is_real_ai', False)
+            response_type = "Real AI Response" if is_real_ai else "Mock/Simulated Response"
+            
+            result = {
                 "status": "success",
-                "provider": type(provider).__name__,
-                "model": test_response.model,
+                "provider": provider_class_name,
+                "model": getattr(test_response, 'model', 'unknown'),
+                "response_type": response_type,
+                "is_real_ai": is_real_ai,
+                "content_length": len(test_response.content) if test_response.content else 0,
                 "timestamp": datetime.utcnow().isoformat()
             }
             
+            if is_real_ai:
+                logger.info(f"✅ {provider_class_name} connection successful - Real AI response received")
+            else:
+                logger.warning(f"⚠️  {provider_class_name} connection returned mock/simulated content")
+            
+            return result
+            
         except Exception as e:
+            logger.error(f"❌ {provider_class_name} connection failed: {str(e)}")
             return {
                 "status": "error",
-                "provider": type(provider).__name__,
+                "provider": provider_class_name,
                 "error": str(e),
                 "timestamp": datetime.utcnow().isoformat()
             }

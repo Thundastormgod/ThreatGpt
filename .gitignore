@@ -202,7 +202,7 @@ config/production.yaml
 
 # Markdown files (keep only essential team documentation)
 *.md
-# Allow essential team documentation
+# Allow essential project documentation
 !README.md
 !CONTRIBUTING.md
 !threatgpt.md
@@ -219,6 +219,11 @@ config/production.yaml
 !API_USAGE.md
 !CONTENT_STORAGE_GUIDE.md
 !DATASET_INTEGRATION.md
+# Essential template documentation for users
+!TEMPLATE_CREATION_GUIDE.md
+!TEMPLATE_MANUAL.md
+!TEMPLATE_QUICK_REFERENCE.md
+!TEMPLATE_VALIDATION_GUIDE.md
 
 # Database files
 *.db

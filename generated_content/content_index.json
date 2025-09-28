@@ -1,12 +1,13 @@
 {
-  "extraction_timestamp": "2025-09-26T15:55:22.461262",
+  "extraction_timestamp": "2025-09-28T11:59:00.831681",
   "statistics": {
-    "total_files": 10,
-    "content_items": 14,
-    "scenarios": 0,
+    "total_files": 21,
+    "content_items": 21,
+    "scenarios": 3,
     "phone_scripts": 0,
-    "email_templates": 1,
-    "training_materials": 13
+    "email_templates": 2,
+    "training_materials": 16,
+    "reports": 0
   },
   "folders": {
     "scenarios": "General threat scenarios and attack walkthroughs",
