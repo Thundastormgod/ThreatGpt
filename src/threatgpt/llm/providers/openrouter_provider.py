@@ -149,7 +149,7 @@ class OpenRouterProvider(BaseLLMProvider):
                                     response.response_id = data.get('id')
                                     response.model_used = data.get('model', self.model)
                                     
-                                    logger.info(f"✅ Real OpenRouter API response received: {len(content)} chars")
+                                    logger.info(f"Real OpenRouter API response received: {len(content)} chars")
                                     return response
                                 else:
                                     logger.error("No content in OpenRouter response")

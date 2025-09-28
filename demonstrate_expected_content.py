@@ -11,7 +11,7 @@ load_dotenv()
 async def demonstrate_expected_content():
     """Show what kind of content should be generated for different templates."""
     
-    print("🎯 DEMONSTRATING EXPECTED CONTENT FROM TEMPLATES")
+    print("DEMONSTRATING EXPECTED CONTENT FROM TEMPLATES")
     print("=" * 60)
     
     # Setup LLM manager with working config
@@ -87,7 +87,7 @@ Make it educational with step-by-step analysis.''',
     ]
     
     for i, scenario in enumerate(scenarios, 1):
-        print(f"\n🚀 SCENARIO {i}: {scenario['name']}")
+        print(f"\nSCENARIO {i}: {scenario['name']}")
         print(f"Expected Format: {scenario['expected_format']}")
         print("-" * 50)
         
@@ -100,14 +100,14 @@ Make it educational with step-by-step analysis.''',
             )
             
             if result and result.content:
-                print(f"✅ Generated {len(result.content)} characters")
-                print(f"📝 Content Preview:")
+                print(f"Generated {len(result.content)} characters")
+                print(f"Content Preview:")
                 print(result.content[:400] + "..." if len(result.content) > 400 else result.content)
             else:
-                print("❌ No content generated")
+                print("No content generated")
                 
         except Exception as e:
-            print(f"❌ Error: {str(e)}")
+            print(f"Error: {str(e)}")
         
         print("\n" + "="*60)
 

@@ -78,7 +78,7 @@ class TemplateCreationWizard:
     
     def _collect_metadata(self):
         """Collect template metadata."""
-        console.print("\n[bold cyan]📝 Step 1: Template Metadata[/bold cyan]")
+        console.print("\n[bold cyan]Step 1: Template Metadata[/bold cyan]")
         
         name = Prompt.ask("Template name", default="New Threat Scenario")
         description = Prompt.ask("Description", default="Description of the threat scenario")
@@ -103,7 +103,7 @@ class TemplateCreationWizard:
     
     def _collect_threat_info(self):
         """Collect threat type and delivery information."""
-        console.print("\n[bold cyan]🎯 Step 2: Threat Configuration[/bold cyan]")
+        console.print("\n[bold cyan]Step 2: Threat Configuration[/bold cyan]")
         
         # Display threat types
         threat_types = [(t.value, t.value.replace('_', ' ').title()) for t in ThreatType]
@@ -144,7 +144,7 @@ class TemplateCreationWizard:
     
     def _collect_target_profile(self):
         """Collect target profile information."""
-        console.print("\n[bold cyan]👤 Step 3: Target Profile[/bold cyan]")
+        console.print("\n[bold cyan]Step 3: Target Profile[/bold cyan]")
         
         role = Prompt.ask("Target role", default="Manager")
         department = Prompt.ask("Department", default="IT")
@@ -269,7 +269,7 @@ class TemplateCreationWizard:
     
     def _validate_and_save(self) -> Optional[Path]:
         """Validate template and save to file."""
-        console.print("\n[bold cyan]✅ Step 6: Validation & Save[/bold cyan]")
+        console.print("\n[bold cyan]Step 6: Validation & Save[/bold cyan]")
         
         # Show template preview
         console.print("\n[bold]Template Preview:[/bold]")
@@ -285,9 +285,9 @@ class TemplateCreationWizard:
         # Validate against schema
         try:
             validated_scenario = ThreatScenario.parse_obj(self.current_template)
-            console.print("[green]✅ Template validation successful![/green]")
+            console.print("[green]Template validation successful![/green]")
         except ValidationError as e:
-            console.print(f"[red]❌ Validation failed:[/red]")
+            console.print(f"[red]Validation failed:[/red]")
             for error in e.errors():
                 console.print(f"  - {error['loc'][0] if error['loc'] else 'root'}: {error['msg']}")
             
@@ -313,7 +313,7 @@ class TemplateCreationWizard:
             f.write(f"# Generated on {datetime.utcnow().isoformat()}Z\n\n")
             yaml.dump(self.current_template, f, default_flow_style=False, sort_keys=False)
         
-        console.print(f"\n[green]✅ Template saved: {file_path}[/green]")
+        console.print(f"\n[green]Template saved: {file_path}[/green]")
         return file_path
 
 
@@ -438,7 +438,7 @@ class TemplateManager:
                     f.write(f"# Fixes applied: {', '.join(fixes_applied)}\n\n")
                     yaml.dump(template_data, f, default_flow_style=False, sort_keys=False)
                 
-                console.print(f"[green]✅ Fixed {template_file.name}:[/green]")
+                console.print(f"[green]Fixed {template_file.name}:[/green]")
                 for fix in fixes_applied:
                     console.print(f"  - {fix}")
                 console.print(f"[dim]Backup saved: {backup_path.name}[/dim]")
@@ -447,7 +447,7 @@ class TemplateManager:
             return False
             
         except Exception as e:
-            console.print(f"[red]❌ Failed to fix {template_file.name}: {e}[/red]")
+            console.print(f"[red]Failed to fix {template_file.name}: {e}[/red]")
             return False
     
     def _fix_threat_type(self, value: str) -> str:
@@ -527,10 +527,10 @@ def main():
         table.add_column("Details", style="green")
         
         for valid in results["valid"]:
-            table.add_row(valid["file"], "✅ Valid", f"{valid['threat_type']} (Difficulty: {valid['difficulty']})")
+            table.add_row(valid["file"], "Valid", f"{valid['threat_type']} (Difficulty: {valid['difficulty']})")
         
         for invalid in results["invalid"]:
-            table.add_row(invalid["file"], "❌ Invalid", invalid["error"][:50] + "...")
+            table.add_row(invalid["file"], "Invalid", invalid["error"][:50] + "...")
         
         console.print(table)
         console.print(f"\nSuccess Rate: {results['statistics']['success_rate']:.1%}")

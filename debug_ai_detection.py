@@ -12,7 +12,7 @@ with open(simulation_file, 'r', encoding='utf-8') as f:
 
 saver = AutoContentSaver()
 
-print("🔍 Testing AI content detection logic...")
+print("Testing AI content detection logic...")
 
 for i, content_item in enumerate(simulation_data.get('generated_content', [])):
     content = content_item.get('content', '')

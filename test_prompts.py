@@ -17,7 +17,7 @@ async def test_prompt_generation():
     simulator = ThreatSimulator(llm_provider=None)
     
     # Test different prompt generation methods
-    print("🔍 Testing prompt generation methods...")
+    print("Testing prompt generation methods...")
     
     # Test reconnaissance prompt
     recon_prompt = simulator._create_scenario_generation_prompt(scenario, "reconnaissance", "Information gathering phase")

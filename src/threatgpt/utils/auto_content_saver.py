@@ -285,7 +285,7 @@ class AutoContentSaver:
         """Create formatted markdown content."""
         
         # Add real AI indicator emoji if it's from a real provider
-        ai_indicator = "🤖 **Real AI Generated**" if provider_name != "fallback" else "🔄 Fallback Content"
+        ai_indicator = "**Real AI Generated**" if provider_name != "fallback" else "Fallback Content"
         
         return f"""# {scenario_name}
 
@@ -308,7 +308,7 @@ class AutoContentSaver:
 ---
 
 *This content was automatically saved by ThreatGPT for educational cybersecurity training purposes.*
-*Real AI content is marked with 🤖 to distinguish from fallback content.*
+*Real AI content is marked to distinguish from fallback content.*
 """
 
 # Global instance for easy access

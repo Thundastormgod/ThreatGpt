@@ -97,15 +97,15 @@ def simulate(
     import json
     
     scenario_path = Path(scenario)
-    console.print(f"[blue]🎯 Loading threat scenario:[/blue] {scenario_path.name}")
+    console.print(f"[blue]Loading threat scenario:[/blue] {scenario_path.name}")
     
     # Load and validate the scenario
     loader = YAMLConfigLoader()
     try:
         scenario_config = loader.load_and_validate_scenario(scenario_path)
-        console.print("[green]✅ Scenario loaded and validated successfully[/green]")
+        console.print("[green]Scenario loaded and validated successfully[/green]")
     except (ConfigurationError, SchemaValidationError) as e:
-        console.print(f"[red]❌ Scenario validation failed:[/red] {e}")
+        console.print(f"[red]Scenario validation failed:[/red] {e}")
         return
     
     # Display scenario summary
@@ -115,11 +115,11 @@ def simulate(
     difficulty_val = scenario_config.difficulty_level.value if hasattr(scenario_config.difficulty_level, 'value') else scenario_config.difficulty_level
     
     summary_text = f"[bold cyan]{metadata.name}[/bold cyan]\n"
-    summary_text += f"📝 {metadata.description}\n\n"
-    summary_text += f"🎯 [bold]Threat Type:[/bold] {threat_type_val.replace('_', ' ').title()}\n"
-    summary_text += f"📡 [bold]Delivery Vector:[/bold] {delivery_vector_val.replace('_', ' ').title()}\n"
-    summary_text += f"⚡ [bold]Difficulty:[/bold] {difficulty_val}/10\n"
-    summary_text += f"⏱️  [bold]Duration:[/bold] {scenario_config.estimated_duration} minutes"
+    summary_text += f"{metadata.description}\n\n"
+    summary_text += f"[bold]Threat Type:[/bold] {threat_type_val.replace('_', ' ').title()}\n"
+    summary_text += f"[bold]Delivery Vector:[/bold] {delivery_vector_val.replace('_', ' ').title()}\n"
+    summary_text += f"[bold]Difficulty:[/bold] {difficulty_val}/10\n"
+    summary_text += f"[bold]Duration:[/bold] {scenario_config.estimated_duration} minutes"
     
     console.print(Panel(summary_text, title="Scenario Overview", border_style="cyan"))
     
@@ -128,15 +128,15 @@ def simulate(
     seniority_val = target_profile.seniority.value if hasattr(target_profile.seniority, 'value') else str(target_profile.seniority)
     technical_val = target_profile.technical_level.value if hasattr(target_profile.technical_level, 'value') else str(target_profile.technical_level)
     
-    target_text = f"👤 [bold]Role:[/bold] {target_profile.role}\n"
-    target_text += f"🏢 [bold]Department:[/bold] {target_profile.department}\n"
-    target_text += f"📊 [bold]Seniority:[/bold] {seniority_val.replace('_', ' ').title()}\n"
-    target_text += f"🔧 [bold]Technical Level:[/bold] {technical_val.title()}\n"
-    target_text += f"🛡️ [bold]Security Awareness:[/bold] {target_profile.security_awareness_level}/10"
+    target_text = f"[bold]Role:[/bold] {target_profile.role}\n"
+    target_text += f"[bold]Department:[/bold] {target_profile.department}\n"
+    target_text += f"[bold]Seniority:[/bold] {seniority_val.replace('_', ' ').title()}\n"
+    target_text += f"[bold]Technical Level:[/bold] {technical_val.title()}\n"
+    target_text += f"[bold]Security Awareness:[/bold] {target_profile.security_awareness_level}/10"
     
     if target_profile.industry:
         industry_val = target_profile.industry.value if hasattr(target_profile.industry, 'value') else str(target_profile.industry)
-        target_text += f"\n🏭 [bold]Industry:[/bold] {industry_val.replace('_', ' ').title()}"
+        target_text += f"\n[bold]Industry:[/bold] {industry_val.replace('_', ' ').title()}"
     
     console.print(Panel(target_text, title="Target Profile", border_style="green"))
     
@@ -144,16 +144,16 @@ def simulate(
     behavioral_pattern = scenario_config.behavioral_pattern
     if behavioral_pattern.mitre_attack_techniques:
         techniques_text = ", ".join(behavioral_pattern.mitre_attack_techniques)
-        console.print(Panel(f"🎯 {techniques_text}", title="MITRE ATT&CK Techniques", border_style="red"))
+        console.print(Panel(f"{techniques_text}", title="MITRE ATT&CK Techniques", border_style="red"))
     
     if dry_run:
-        console.print("[yellow]🔍 Dry run mode - configuration validation complete[/yellow]")
-        console.print("[green]✅ Scenario is ready for execution[/green]")
+        console.print("[yellow]Dry run mode - configuration validation complete[/yellow]")
+        console.print("[green]Scenario is ready for execution[/green]")
         return
     
     if preview or (ctx.obj and ctx.obj.get("verbose", False)):
         # Show detailed execution plan
-        console.print("\n[bold cyan]📋 Execution Plan:[/bold cyan]")
+        console.print("\n[bold cyan]Execution Plan:[/bold cyan]")
         
         execution_table = Table(show_header=True, header_style="bold magenta")
         execution_table.add_column("Phase", style="cyan")
@@ -184,23 +184,23 @@ def simulate(
         
         # Show simulation parameters
         sim_params = scenario_config.simulation_parameters
-        params_text = f"⚙️ [bold]Max Iterations:[/bold] {sim_params.max_iterations}\n"
-        params_text += f"⏰ [bold]Max Duration:[/bold] {sim_params.max_duration_minutes} minutes\n"
-        params_text += f"📊 [bold]Escalation:[/bold] {'Enabled' if sim_params.escalation_enabled else 'Disabled'}\n"
-        params_text += f"🎯 [bold]Adaptation:[/bold] {'Enabled' if sim_params.response_adaptation else 'Disabled'}\n"
-        params_text += f"🌐 [bold]Language:[/bold] {sim_params.language}\n"
-        params_text += f"📢 [bold]Tone:[/bold] {sim_params.tone.replace('_', ' ').title()}\n"
-        params_text += f"⚡ [bold]Urgency Level:[/bold] {sim_params.urgency_level}/10"
+        params_text = f"[bold]Max Iterations:[/bold] {sim_params.max_iterations}\n"
+        params_text += f"[bold]Max Duration:[/bold] {sim_params.max_duration_minutes} minutes\n"
+        params_text += f"[bold]Escalation:[/bold] {'Enabled' if sim_params.escalation_enabled else 'Disabled'}\n"
+        params_text += f"[bold]Adaptation:[/bold] {'Enabled' if sim_params.response_adaptation else 'Disabled'}\n"
+        params_text += f"[bold]Language:[/bold] {sim_params.language}\n"
+        params_text += f"[bold]Tone:[/bold] {sim_params.tone.replace('_', ' ').title()}\n"
+        params_text += f"[bold]Urgency Level:[/bold] {sim_params.urgency_level}/10"
         
         console.print(Panel(params_text, title="Simulation Parameters", border_style="blue"))
     
     # Check if we should proceed with simulation
-    if not preview and not click.confirm("\n🚀 Proceed with simulation execution?"):
-        console.print("[yellow]⏸️  Simulation cancelled by user[/yellow]")
+    if not preview and not click.confirm("\nProceed with simulation execution?"):
+        console.print("[yellow]Simulation cancelled by user[/yellow]")
         return
     
     # Execute actual threat simulation
-    console.print("\n[bold green]🚀 Starting Threat Simulation...[/bold green]")
+    console.print("\n[bold green]Starting Threat Simulation...[/bold green]")
     
     try:
         # Initialize simulation components
@@ -246,10 +246,10 @@ def simulate(
         
         # Check LLM provider status and test connection
         if not llm_manager.is_available():
-            console.print("[red]❌ No LLM provider configured. Simulation will use fallback content only.[/red]")
+            console.print("[red]No LLM provider configured. Simulation will use fallback content only.[/red]")
         else:
             # Test connection to verify real AI responses
-            console.print("[blue]🔍 Testing LLM provider connection...[/blue]")
+            console.print("[blue]Testing LLM provider connection...[/blue]")
             
             import asyncio
             test_result = asyncio.run(llm_manager.test_connection())
@@ -257,31 +257,31 @@ def simulate(
             if test_result["status"] == "success":
                 is_real_ai = test_result.get("is_real_ai", False)
                 if is_real_ai:
-                    console.print(f"[green]✅ Real AI connection verified with {test_result['provider']}[/green]")
+                    console.print(f"[green]Real AI connection verified with {test_result['provider']}[/green]")
                 else:
-                    console.print(f"[yellow]⚠️  {test_result['provider']} using mock/simulated responses[/yellow]")
+                    console.print(f"[yellow]{test_result['provider']} using mock/simulated responses[/yellow]")
             else:
-                console.print(f"[red]❌ LLM connection failed: {test_result.get('error', 'Unknown error')}[/red]")
-                console.print("[yellow]⚠️  Simulation will use fallback content.[/yellow]")
+                console.print(f"[red]LLM connection failed: {test_result.get('error', 'Unknown error')}[/red]")
+                console.print("[yellow]Simulation will use fallback content.[/yellow]")
         
         # Initialize simulator
         sim_params = scenario_config.simulation_parameters
         simulator = ThreatSimulator(llm_provider=llm_manager, max_stages=sim_params.max_iterations)
         
         # Execute simulation
-        console.print(f"[cyan]📝 Executing scenario:[/cyan] {metadata.name}")
-        console.print(f"[cyan]🎯 Threat type:[/cyan] {threat_type_val}")
+        console.print(f"[cyan]Executing scenario:[/cyan] {metadata.name}")
+        console.print(f"[cyan]Threat type:[/cyan] {threat_type_val}")
         
         # Use asyncio to run the simulation
         import asyncio
         simulation_result = asyncio.run(simulator.execute_simulation(core_scenario))
         
         # Display results
-        console.print(f"\n[bold green]✅ Simulation completed![/bold green]")
-        console.print(f"[cyan]📊 Simulation ID:[/cyan] {simulation_result.result_id}")
-        console.print(f"[cyan]⏱️  Duration:[/cyan] {simulation_result.total_duration_seconds:.1f} seconds")
-        console.print(f"[cyan]📈 Success Rate:[/cyan] {simulation_result.success_rate:.1%}")
-        console.print(f"[cyan]🔄 Stages Completed:[/cyan] {len(simulation_result.stages)}")
+        console.print(f"\n[bold green]Simulation completed![/bold green]")
+        console.print(f"[cyan]Simulation ID:[/cyan] {simulation_result.result_id}")
+        console.print(f"[cyan]Duration:[/cyan] {simulation_result.total_duration_seconds:.1f} seconds")
+        console.print(f"[cyan]Success Rate:[/cyan] {simulation_result.success_rate:.1%}")
+        console.print(f"[cyan]Stages Completed:[/cyan] {len(simulation_result.stages)}")
         
         # Create validated simulation output
         simulation_output = SimulationOutput(
@@ -347,11 +347,11 @@ def simulate(
         try:
             saved_content_files = save_content_automatically(simulation_output.to_dict())
             if saved_content_files:
-                console.print(f"[green]📁 Auto-saved {len(saved_content_files)} content item(s) to generated_content/[/green]")
+                console.print(f"[green]Auto-saved {len(saved_content_files)} content item(s) to generated_content/[/green]")
                 for file_path in saved_content_files:
                     console.print(f"   → {file_path}")
         except Exception as e:
-            console.print(f"[yellow]⚠️  Auto-save warning: {str(e)}[/yellow]")
+            console.print(f"[yellow]Auto-save warning: {str(e)}[/yellow]")
             import logging
             logger_warn = logging.getLogger(__name__)
             logger_warn.warning(f"Auto content save failed: {e}")
@@ -364,7 +364,7 @@ def simulate(
         results = simulation_output.to_dict()
         
     except Exception as e:
-        console.print(f"[red]❌ Simulation failed: {str(e)}[/red]")
+        console.print(f"[red]Simulation failed: {str(e)}[/red]")
         import logging
         logger = logging.getLogger(__name__)
         logger.error(f"Simulation execution failed: {e}")
@@ -373,7 +373,7 @@ def simulate(
     # Output results in requested format
     if output == "json":
         results_json = json.dumps(results, indent=2, default=str)
-        console.print(f"\n[bold blue]📄 JSON Results:[/bold blue]")
+        console.print(f"\n[bold blue]JSON Results:[/bold blue]")
         from rich.syntax import Syntax
         syntax = Syntax(results_json, "json", theme="monokai", line_numbers=True)
         console.print(Panel(syntax, title="Simulation Results (JSON)", border_style="blue"))
@@ -381,34 +381,34 @@ def simulate(
     elif output == "yaml":
         import yaml
         results_yaml = yaml.dump(results, default_flow_style=False, sort_keys=False)
-        console.print(f"\n[bold blue]📄 YAML Results:[/bold blue]")
+        console.print(f"\n[bold blue]YAML Results:[/bold blue]")
         from rich.syntax import Syntax
         syntax = Syntax(results_yaml, "yaml", theme="monokai", line_numbers=True)
         console.print(Panel(syntax, title="Simulation Results (YAML)", border_style="blue"))
     
     else:  # report format
-        console.print(f"\n[bold blue]📊 Simulation Report:[/bold blue]")
+        console.print(f"\n[bold blue]Simulation Report:[/bold blue]")
         
         report_table = Table(title=f"Threat Simulation Report - {results['simulation_id']}", show_header=True)
         report_table.add_column("Metric", style="cyan")
         report_table.add_column("Value", style="white")
         report_table.add_column("Status", justify="center")
         
-        report_table.add_row("Content Generation", "Successful", "[green]✅[/green]")
-        report_table.add_row("Delivery Method", delivery_vector_val.replace('_', ' ').title(), "[green]✅[/green]")
-        report_table.add_row("Target Engagement", "High", "[green]✅[/green]")
-        report_table.add_row("Security Response", "Appropriate", "[green]✅[/green]")
-        report_table.add_row("Learning Objectives", "Met", "[green]✅[/green]")
+        report_table.add_row("Content Generation", "Successful", "[green]PASS[/green]")
+        report_table.add_row("Delivery Method", delivery_vector_val.replace('_', ' ').title(), "[green]PASS[/green]")
+        report_table.add_row("Target Engagement", "High", "[green]PASS[/green]")
+        report_table.add_row("Security Response", "Appropriate", "[green]PASS[/green]")
+        report_table.add_row("Learning Objectives", "Met", "[green]PASS[/green]")
         
         console.print(report_table)
         
-        console.print("\n[bold yellow]💡 Recommendations:[/bold yellow]")
+        console.print("\n[bold yellow]Recommendations:[/bold yellow]")
         for i, rec in enumerate(results["recommendations"], 1):
             console.print(f"  {i}. {rec}")
     
-    console.print(f"\n[dim]💾 Full results saved to: {saved_file}[/dim]")
-    console.print(f"[dim]📝 Results can be loaded using simulation ID: {results['simulation_id']}[/dim]")
-    console.print("[green]🎉 Threat simulation completed successfully![/green]")
+    console.print(f"\n[dim]Full results saved to: {saved_file}[/dim]")
+    console.print(f"[dim]Results can be loaded using simulation ID: {results['simulation_id']}[/dim]")
+    console.print("[green]Threat simulation completed successfully![/green]")
 
 
 @cli.command()
@@ -437,7 +437,7 @@ def validate(config_file: Optional[str], schema_only: bool, directory: Optional[
     if directory:
         # Validate all files in directory
         dir_path = Path(directory)
-        console.print(f"[blue]🔍 Validating all YAML files in:[/blue] {dir_path}")
+        console.print(f"[blue]Validating all YAML files in:[/blue] {dir_path}")
         
         try:
             results = loader.validate_config_directory(dir_path)
@@ -447,7 +447,7 @@ def validate(config_file: Optional[str], schema_only: bool, directory: Optional[
             valid = results['valid_files']
             invalid = results['invalid_files']
             
-            console.print(f"\n[bold cyan]📊 Validation Summary[/bold cyan]")
+            console.print(f"\n[bold cyan]Validation Summary[/bold cyan]")
             console.print(f"Total Files: {total}")
             console.print(f"Valid: [green]{valid}[/green]")
             console.print(f"Invalid: [red]{invalid}[/red]")
@@ -455,7 +455,7 @@ def validate(config_file: Optional[str], schema_only: bool, directory: Optional[
             if total > 0:
                 success_rate = (valid / total) * 100
                 if success_rate == 100:
-                    console.print(f"Success Rate: [green]{success_rate:.1f}%[/green] 🎉")
+                    console.print(f"Success Rate: [green]{success_rate:.1f}%[/green]")
                 elif success_rate >= 80:
                     console.print(f"Success Rate: [yellow]{success_rate:.1f}%[/yellow]")
                 else:
@@ -463,19 +463,19 @@ def validate(config_file: Optional[str], schema_only: bool, directory: Optional[
             
             # Show failed files
             if invalid > 0:
-                console.print(f"\n[bold red]❌ Failed Validations:[/bold red]")
+                console.print(f"\n[bold red]Failed Validations:[/bold red]")
                 for file_path, file_result in results['files'].items():
                     if file_result['status'] == 'invalid':
                         console.print(f"  • {file_path}: {file_result['error'][:80]}...")
             
         except ConfigurationError as e:
-            console.print(f"[red]❌ Directory validation error:[/red] {e}")
+            console.print(f"[red]Directory validation error:[/red] {e}")
             return
     
     elif config_file:
         # Validate single file
         file_path = Path(config_file)
-        console.print(f"[blue]🔍 Validating configuration:[/blue] {file_path}")
+        console.print(f"[blue]Validating configuration:[/blue] {file_path}")
         
         if schema_only:
             console.print("[dim]Schema validation only (semantic validation disabled)[/dim]")
@@ -483,15 +483,15 @@ def validate(config_file: Optional[str], schema_only: bool, directory: Optional[
         try:
             # Load and validate
             config = loader.load_config(file_path)
-            console.print("[green]✅ Configuration loaded successfully[/green]")
+            console.print("[green]Configuration loaded successfully[/green]")
             
             if not schema_only:
                 scenario = loader.validate_threat_scenario(config)
-                console.print("[green]✅ Schema validation passed[/green]")
+                console.print("[green]Schema validation passed[/green]")
                 
                 # Display scenario summary
                 metadata = scenario.metadata
-                console.print(f"\n[bold cyan]📋 Scenario Summary:[/bold cyan]")
+                console.print(f"\n[bold cyan]Scenario Summary:[/bold cyan]")
                 console.print(f"Name: [cyan]{metadata.name}[/cyan]")
                 threat_type_val = scenario.threat_type.value if hasattr(scenario.threat_type, 'value') else str(scenario.threat_type)
                 difficulty_val = scenario.difficulty_level.value if hasattr(scenario.difficulty_level, 'value') else scenario.difficulty_level
@@ -502,9 +502,9 @@ def validate(config_file: Optional[str], schema_only: bool, directory: Optional[
                 console.print(f"Target: [green]{scenario.target_profile.role} ({seniority_val.replace('_', ' ').title()})[/green]")
             
         except ConfigurationError as e:
-            console.print(f"[red]❌ Configuration Error:[/red] {e}")
+            console.print(f"[red]Configuration Error:[/red] {e}")
         except SchemaValidationError as e:
-            console.print(f"[red]❌ Schema Validation Failed:[/red] {e}")
+            console.print(f"[red]Schema Validation Failed:[/red] {e}")
             if e.errors:
                 console.print("\n[bold red]Validation Errors:[/bold red]")
                 for i, error in enumerate(e.errors[:10], 1):  # Show first 10 errors
@@ -515,12 +515,12 @@ def validate(config_file: Optional[str], schema_only: bool, directory: Optional[
     else:
         # Validate current directory by default
         current_dir = Path.cwd()
-        console.print(f"[blue]🔍 Validating YAML files in current directory:[/blue] {current_dir}")
+        console.print(f"[blue]Validating YAML files in current directory:[/blue] {current_dir}")
         
         yaml_files = list(current_dir.glob("*.yaml")) + list(current_dir.glob("*.yml"))
         
         if not yaml_files:
-            console.print("[yellow]⚠️  No YAML files found in current directory[/yellow]")
+            console.print("[yellow]No YAML files found in current directory[/yellow]")
             return
         
         valid_count = 0
@@ -529,10 +529,10 @@ def validate(config_file: Optional[str], schema_only: bool, directory: Optional[
                 config = loader.load_config(yaml_file)
                 if not schema_only:
                     scenario = loader.validate_threat_scenario(config)
-                console.print(f"[green]✅[/green] {yaml_file.name}")
+                console.print(f"[green]PASS[/green] {yaml_file.name}")
                 valid_count += 1
             except (ConfigurationError, SchemaValidationError) as e:
-                console.print(f"[red]❌[/red] {yaml_file.name}: {str(e)[:60]}...")
+                console.print(f"[red]FAIL[/red] {yaml_file.name}: {str(e)[:60]}...")
         
         console.print(f"\n[cyan]Validated {valid_count}/{len(yaml_files)} files successfully[/cyan]")
 
@@ -602,12 +602,12 @@ def status() -> None:
     status_table.add_column("Version", style="white")
     
     # TODO: Add actual status checks
-    status_table.add_row("CLI Interface", "✅ Active", __version__)
-    status_table.add_row("Configuration Engine", "✅ Active", "v2.0")
-    status_table.add_row("LLM Integration", "✅ Active", "v1.0")
-    status_table.add_row("Simulation Engine", "✅ Active", "v1.0")
-    status_table.add_row("API Gateway", "🚧 In Development", "N/A")
-    status_table.add_row("Safety Module", "🚧 In Development", "N/A")
+    status_table.add_row("CLI Interface", "Active", __version__)
+    status_table.add_row("Configuration Engine", "Active", "v2.0")
+    status_table.add_row("LLM Integration", "Active", "v1.0")
+    status_table.add_row("Simulation Engine", "Active", "v1.0")
+    status_table.add_row("API Gateway", "In Development", "N/A")
+    status_table.add_row("Safety Module", "In Development", "N/A")
     
     console.print(status_table)
 

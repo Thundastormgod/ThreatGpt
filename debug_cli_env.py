@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 from src.threatgpt.llm.manager import LLMManager
 
-print("🔍 Debugging CLI environment loading...")
+print("Debugging CLI environment loading...")
 print()
 
 # Check system environment first
@@ -36,24 +36,24 @@ try:
     print(f"   Available providers: {providers}")
     
     if 'openrouter' in providers:
-        print("   ✅ OpenRouter provider is available")
+        print("   OpenRouter provider is available")
         
         # Test a simple generation
         print("4. Testing content generation...")
         import asyncio
         result = asyncio.run(llm_manager.generate_content("Test message", provider_name='openrouter'))
         if result:
-            print(f"   ✅ Generation successful: {len(result.content)} characters")
+            print(f"   Generation successful: {len(result.content)} characters")
             print(f"   Model used: {getattr(result, 'model_used', 'unknown')}")
         else:
-            print("   ❌ Generation failed")
+            print("   Generation failed")
     else:
-        print("   ❌ OpenRouter provider not available")
+        print("   OpenRouter provider not available")
         
 except Exception as e:
-    print(f"   ❌ Error: {str(e)}")
+    print(f"   Error: {str(e)}")
     import traceback
     traceback.print_exc()
 
 print()
-print("🎯 Environment debugging complete!")
+print("Environment debugging complete!")

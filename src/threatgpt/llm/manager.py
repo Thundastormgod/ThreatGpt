@@ -95,9 +95,9 @@ class LLMManager:
         
         try:
             provider_name = type(provider).__name__
-            logger.info(f"🤖 Attempting to generate content with {provider_name}")
-            logger.info(f"📝 Prompt length: {len(enhanced_prompt)} characters")
-            logger.info(f"🎯 Scenario type: {scenario_type}")
+            logger.info(f"Attempting to generate content with {provider_name}")
+            logger.info(f"Prompt length: {len(enhanced_prompt)} characters")
+            logger.info(f"Scenario type: {scenario_type}")
             
             response = await provider.generate_content(
                 prompt=enhanced_prompt,
@@ -107,16 +107,16 @@ class LLMManager:
             
             # Check if this is a real API response or mock content
             if response and hasattr(response, 'provider') and response.provider != "fallback":
-                logger.info(f"✅ Real AI content generated from {response.provider}")
-                logger.info(f"📊 Content length: {len(response.content)} characters")
-                logger.info(f"🤖 Model used: {getattr(response, 'model', 'unknown')}")
+                logger.info(f"Real AI content generated from {response.provider}")
+                logger.info(f"Content length: {len(response.content)} characters")
+                logger.info(f"Model used: {getattr(response, 'model', 'unknown')}")
                 
                 # Validate and sanitize response
                 response = self._validate_response(response, scenario_type)
                 response.is_real_ai = True
                 return response
             else:
-                logger.warning(f"⚠️  Received mock/simulated content from {provider_name}")
+                logger.warning(f"Received mock/simulated content from {provider_name}")
                 if response:
                     response.is_real_ai = False
                     return response
@@ -124,8 +124,8 @@ class LLMManager:
                     raise RuntimeError("Provider returned None response")
             
         except Exception as e:
-            logger.error(f"❌ Content generation failed with {type(provider).__name__}: {str(e)}")
-            logger.error(f"🔄 Returning fallback content for {scenario_type} scenario")
+            logger.error(f"Content generation failed with {type(provider).__name__}: {str(e)}")
+            logger.error(f"Returning fallback content for {scenario_type} scenario")
             
             # Create clear fallback response
             fallback_response = LLMResponse(
@@ -170,14 +170,14 @@ User Request:
         """Validate and sanitize LLM response."""
         # Basic content validation
         if not response.content or len(response.content.strip()) < 10:
-            logger.warning(f"⚠️  Received insufficient content (length: {len(response.content if response.content else 'None')})")
+            logger.warning(f"Received insufficient content (length: {len(response.content if response.content else 'None')})")
             response.content = f"[Insufficient content generated for {scenario_type} scenario]"
             response.is_real_ai = False
         
         # Log content type and quality
         is_fallback = response.content.startswith("[FALLBACK") or response.content.startswith("[Content generation unavailable")
         if is_fallback:
-            logger.warning("⚠️  Response contains fallback content")
+            logger.warning("Response contains fallback content")
             response.is_real_ai = False
         
         # Add safety metadata as attributes if metadata doesn't exist
@@ -284,14 +284,14 @@ User Request:
             }
             
             if is_real_ai:
-                logger.info(f"✅ {provider_class_name} connection successful - Real AI response received")
+                logger.info(f"{provider_class_name} connection successful - Real AI response received")
             else:
-                logger.warning(f"⚠️  {provider_class_name} connection returned mock/simulated content")
+                logger.warning(f"{provider_class_name} connection returned mock/simulated content")
             
             return result
             
         except Exception as e:
-            logger.error(f"❌ {provider_class_name} connection failed: {str(e)}")
+            logger.error(f"{provider_class_name} connection failed: {str(e)}")
             return {
                 "status": "error",
                 "provider": provider_class_name,

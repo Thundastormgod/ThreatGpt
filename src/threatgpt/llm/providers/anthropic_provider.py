@@ -69,7 +69,7 @@ class AnthropicProvider(BaseLLMProvider):
                         "output_tokens": response.usage.output_tokens
                     }
                     
-                    logger.info(f"✅ Real Anthropic API response received: {len(content)} chars")
+                    logger.info(f"Real Anthropic API response received: {len(content)} chars")
                     return llm_response
                     
                 except ImportError:
