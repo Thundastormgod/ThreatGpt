@@ -1,13 +1,16 @@
 # Security Policy
 
+> **For comprehensive security documentation, see [SECURITY_GUIDE.md](SECURITY_GUIDE.md)**
+
 ## Supported Versions
 
 We provide security updates for the following versions of ThreatGPT:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.1.x   | :white_check_mark: |
-| < 0.1   | :x:                |
+| Version | Supported          | End of Support |
+| ------- | ------------------ | -------------- |
+| 1.0.x   | Active             | TBD            |
+| 0.1.x   | Limited            | 2026-06-01     |
+| < 0.1   | Unsupported        | 2025-01-01     |
 
 ## Reporting a Vulnerability
 
@@ -15,11 +18,11 @@ The ThreatGPT team takes security seriously. We appreciate your efforts to respo
 
 ### How to Report
 
-**For security vulnerabilities, please do NOT use GitHub Issues.**
+**IMPORTANT: Do NOT use GitHub Issues for security vulnerabilities**
 
 Instead, please report security vulnerabilities to:
 - **Email**: okino007@gmail.com
-- **Subject**: [SECURITY] ThreatGPT Vulnerability Report
+- **Subject**: `[SECURITY] ThreatGPT Vulnerability Report`
 
 ### What to Include
 

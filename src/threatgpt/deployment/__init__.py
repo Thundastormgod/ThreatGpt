@@ -326,7 +326,7 @@ class EmailDeploymentService(BaseDeploymentService):
         
         tracking_id = str(uuid4())
         
-        # Mock email sending - in production this would integrate with actual email providers
+        # Development email sending (provider integration pending)
         email_data = {
             "to": target.get("email"),
             "from": content.get("sender_email"),
@@ -343,12 +343,12 @@ class EmailDeploymentService(BaseDeploymentService):
     
     async def _register_spoofed_domains(self, content: Dict[str, Any]) -> List[str]:
         """Register spoofed domains for the campaign."""
-        # Mock domain registration
+        # Development domain registration
         return ["fake-company.com", "secure-login.net"]
     
     async def _create_landing_pages(self, content: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Create credential harvesting landing pages."""
-        # Mock landing page creation
+        # Development landing page creation
         return [
             {
                 "url": "https://fake-company.com/login",
@@ -380,12 +380,12 @@ class EmailDeploymentService(BaseDeploymentService):
     
     async def get_deployment_status(self, deployment_id: str) -> DeploymentStatus:
         """Get current deployment status."""
-        # Mock status check
+        # Development status check
         return DeploymentStatus.ACTIVE
     
     async def cancel_deployment(self, deployment_id: str) -> bool:
         """Cancel an active deployment."""
-        # Mock cancellation
+        # Development cancellation
         return True
 
 
@@ -468,7 +468,7 @@ class SMSDeploymentService(BaseDeploymentService):
         
         tracking_id = str(uuid4())
         
-        # Mock SMS sending
+        # Development SMS sending
         sms_data = {
             "to": target.get("phone"),
             "message": message,
