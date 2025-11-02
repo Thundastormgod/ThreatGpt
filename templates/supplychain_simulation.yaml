@@ -74,7 +74,7 @@ simulation_parameters:
   max_duration_minutes: 120
   escalation_enabled: true
   response_adaptation: true
-  multi_stage_attack: true
+  multi_stage_attack: true 
   creativity_settings:
     vendor_knowledge_depth: '{RANGE:0.5-0.9}'
     industry_terminology_accuracy: '{RANGE:0.7-1.0}'
