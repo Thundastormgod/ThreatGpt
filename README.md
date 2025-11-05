@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Security: bandit](https://img.shields.io/badge/security-bandit-green.svg)](https://github.com/PyCQA/bandit)
-[![Tests](https://github.com/threatgpt/threatgpt/workflows/Tests/badge.svg)](https://github.com/threatgpt/threatgpt/actions)
+[![Tests](https://github.com/2abet/ThreatGpt/workflows/Tests/badge.svg)](https://github.com/2abet/ThreatGpt/actions)
 
 ThreatGPT is a production-grade cybersecurity threat simulation platform that leverages Large Language Models (LLMs) to generate realistic, context-aware threat scenarios for training, awareness, and red teaming activities.
 
@@ -160,8 +160,8 @@ curl -X POST "http://localhost:8000/scenarios" \
 
 ```bash
 # Clone and setup
-git clone https://github.com/threatgpt/threatgpt.git
-cd threatgpt
+git clone https://github.com/2abet/ThreatGpt.git
+cd ThreatGpt
 
 # Install development dependencies
 poetry install --with dev,test
@@ -370,8 +370,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - **Documentation**: [https://threatgpt.readthedocs.io](https://threatgpt.readthedocs.io)
-- **Issues**: [GitHub Issues](https://github.com/threatgpt/threatgpt/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/threatgpt/threatgpt/discussions)
+- **Issues**: [GitHub Issues](https://github.com/2abet/ThreatGpt/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/2abet/ThreatGpt/discussions)
 - **Email**: okino007@gmail.com
 
 ---

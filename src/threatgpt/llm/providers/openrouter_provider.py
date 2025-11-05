@@ -28,7 +28,7 @@ class OpenRouterProvider(BaseLLMProvider):
         self.model = config.get('model', 'qwen/qwen3-vl-235b-a22b-thinking')  # Default to working Qwen model
         self.base_url = config.get('base_url', 'https://openrouter.ai/api/v1')
         self.app_name = config.get('app_name', 'ThreatGPT')
-        self.site_url = config.get('site_url', 'https://github.com/threatgpt/threatgpt')
+        self.site_url = config.get('site_url', 'https://github.com/2abet/ThreatGpt')
         
         # Popular model options for ThreatGPT (including user's working Qwen model)
         self.recommended_models = {
