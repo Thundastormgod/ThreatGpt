@@ -245,7 +245,7 @@ class OpenAIProvider(BaseLLMProvider):
             try:
                 error_data = e.response.json()
                 error_msg += f" - {error_data.get('error', {}).get('message', 'Unknown error')}"
-            except:
+            except (ValueError, KeyError, AttributeError):
                 error_msg += f" - {e.response.text}"
             
             return LLMResponse(
@@ -363,7 +363,7 @@ class AnthropicProvider(BaseLLMProvider):
             try:
                 error_data = e.response.json()
                 error_msg += f" - {error_data.get('error', {}).get('message', 'Unknown error')}"
-            except:
+            except (ValueError, KeyError, AttributeError):
                 error_msg += f" - {e.response.text}"
             
             return LLMResponse(
