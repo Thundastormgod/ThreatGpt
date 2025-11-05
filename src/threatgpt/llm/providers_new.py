@@ -31,6 +31,13 @@ class RateLimiter:
     """Token bucket rate limiter for API requests."""
     
     def __init__(self, max_requests: int, max_tokens: int, window_seconds: int = 60):
+        """Initialize the rate limiter.
+        
+        Args:
+            max_requests: Maximum number of requests allowed per window
+            max_tokens: Maximum number of tokens allowed per window
+            window_seconds: Time window in seconds for rate limiting (default: 60)
+        """
         self.max_requests = max_requests
         self.max_tokens = max_tokens
         self.window_seconds = window_seconds
@@ -73,6 +80,11 @@ class BaseLLMProvider(ABC):
     """Abstract base class for LLM providers."""
     
     def __init__(self, config: LLMProviderConfig):
+        """Initialize the LLM provider.
+        
+        Args:
+            config: Provider configuration including API keys and limits
+        """
         self.config = config
         self.rate_limiter = RateLimiter(
             max_requests=config.max_requests_per_minute,
@@ -168,6 +180,11 @@ class OpenAIProvider(BaseLLMProvider):
     }
     
     def __init__(self, config: LLMProviderConfig):
+        """Initialize the OpenAI provider.
+        
+        Args:
+            config: Provider configuration including API key and model settings
+        """
         super().__init__(config)
         self.base_url = config.base_url or "https://api.openai.com/v1"
     
@@ -289,6 +306,11 @@ class AnthropicProvider(BaseLLMProvider):
     }
     
     def __init__(self, config: LLMProviderConfig):
+        """Initialize the Anthropic provider.
+        
+        Args:
+            config: Provider configuration including API key and model settings
+        """
         super().__init__(config)
         self.base_url = config.base_url or "https://api.anthropic.com"
     
@@ -400,6 +422,11 @@ class OpenRouterProviderAdapter(BaseLLMProvider):
     """Adapter for OpenRouter provider to work with the new provider interface."""
     
     def __init__(self, config: LLMProviderConfig):
+        """Initialize the OpenRouter provider adapter.
+        
+        Args:
+            config: Provider configuration including API key and model settings
+        """
         super().__init__(config)
         self.api_key = config.api_key
         self.model = config.default_model.value
