@@ -243,6 +243,8 @@ config/production.yaml
 !SETUP_PRIVATE_REPO.md
 # Ollama integration guide
 !OLLAMA_INTEGRATION_GUIDE.md
+# Prompt engineering documentation
+!PROMPT_ENGINEERING_6_TIER_SYSTEM.md
 
 # Database files
 *.db
