@@ -206,6 +206,9 @@ test_*.yml
 **/debug_*
 **/demo_*
 
+# Personal development directory (separate private repo)
+personal_dev/
+
 # Configuration files with secrets
 config/local.yaml
 config/production.yaml
@@ -236,6 +239,8 @@ config/production.yaml
 !TEMPLATE_MANUAL.md
 !TEMPLATE_QUICK_REFERENCE.md
 !TEMPLATE_VALIDATION_GUIDE.md
+# Private repository setup guide
+!SETUP_PRIVATE_REPO.md
 
 # Database files
 *.db
