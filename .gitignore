@@ -241,6 +241,8 @@ config/production.yaml
 !TEMPLATE_VALIDATION_GUIDE.md
 # Private repository setup guide
 !SETUP_PRIVATE_REPO.md
+# Ollama integration guide
+!OLLAMA_INTEGRATION_GUIDE.md
 
 # Database files
 *.db

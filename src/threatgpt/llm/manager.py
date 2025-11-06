@@ -13,6 +13,7 @@ from .base import BaseLLMProvider, LLMResponse
 from .providers.openai_provider import OpenAIProvider
 from .providers.anthropic_provider import AnthropicProvider
 from .providers.openrouter_provider import OpenRouterProvider
+from .providers.ollama_provider import OllamaProvider
 
 logger = logging.getLogger(__name__)
 
@@ -53,9 +54,27 @@ class LLMManager:
                 self._providers['openrouter'] = OpenRouterProvider(openrouter_config)
                 logger.info("OpenRouter provider initialized")
             
+            # Initialize Ollama if enabled (no API key required!)
+            ollama_config = self.config.get('ollama', {})
+            if ollama_config.get('enabled', True):  # Enabled by default
+                try:
+                    ollama_provider = OllamaProvider(ollama_config)
+                    if ollama_provider.is_available():
+                        self._providers['ollama'] = ollama_provider
+                        logger.info("Ollama provider initialized and available")
+                    else:
+                        logger.info("Ollama configured but server not available (install with: brew install ollama or see https://ollama.ai)")
+                except Exception as e:
+                    logger.debug(f"Ollama initialization skipped: {e}")
+            
             # Set default provider if not specified
             if not self.provider and self._providers:
-                provider_name = list(self._providers.keys())[0]
+                # Prefer Ollama for local/offline usage if available
+                if 'ollama' in self._providers:
+                    provider_name = 'ollama'
+                    logger.info("Using Ollama as default provider (local/offline)")
+                else:
+                    provider_name = list(self._providers.keys())[0]
                 self.provider = self._providers[provider_name]
                 logger.info(f"Using default provider: {provider_name}")
                 
