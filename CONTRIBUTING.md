@@ -12,8 +12,8 @@ Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md) to ensure a wel
 
 1. **Fork and Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/threatgpt.git
-   cd threatgpt
+   git clone https://github.com/your-username/ThreatGpt.git
+   cd ThreatGpt
    ```
 
 2. **Set up Python Environment**
@@ -287,7 +287,7 @@ threatgpt/
 - **Testing**: Increase test coverage and add edge case testing
 
 ### Feature Requests
-Check our [GitHub Issues](https://github.com/threatgpt/threatgpt/issues) for current feature requests and bug reports.
+Check our [GitHub Issues](https://github.com/Thundastormgod/ThreatGpt/issues) for current feature requests and bug reports.
 
 ## Release Process
 
