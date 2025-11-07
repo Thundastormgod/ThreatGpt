@@ -10,7 +10,8 @@ ThreatGPT is a production-grade cybersecurity threat simulation platform that le
 
 ## 🚀 Features
 
-- **Multi-LLM Support**: ✅ Integrates with OpenAI GPT-4 and Anthropic Claude
+- **Multi-LLM Support**: ✅ Integrates with OpenAI GPT-4, Anthropic Claude, OpenRouter, and **Ollama (Local/Offline)**
+- **Local LLM Support**: 🆕 Run completely offline with Ollama - no API keys or internet required!
 - **YAML-Based Configuration**: ✅ Define threat scenarios using intuitive YAML schemas  
 - **Production-Ready Core**: ✅ Scalable simulation engine with proper data models
 - **CLI Interface**: ✅ Command-line tool for scenario management and execution
@@ -43,7 +44,8 @@ ThreatGPT Platform
 
 - Python 3.11 or higher
 - Git (for cloning the repository)
-- An OpenRouter API key or other supported LLM provider credentials
+- **Option A:** An API key for OpenRouter, OpenAI, or Anthropic
+- **Option B:** [Ollama](https://ollama.ai) installed for local/offline usage (no API key needed!)
 
 ### Installation & Setup
 
@@ -81,14 +83,34 @@ pip install -r requirements.txt
 pip install -r requirements-dev.txt
 ```
 
-#### Step 4: Configure API Keys
-```bash
-# Copy example configuration
-cp config.yaml.example config.yaml
+#### Step 4: Configure LLM Provider
 
-# Edit config.yaml with your API credentials
-# Or set environment variables for your LLM provider
+**Option A: Use Ollama (Local/Offline - Recommended for Development)**
+```bash
+# Install Ollama
+# macOS: brew install ollama
+# Linux: curl -fsSL https://ollama.ai/install.sh | sh
+# Windows: Download from https://ollama.ai
+
+# Start Ollama server
+ollama serve
+
+# Pull a model
+ollama pull llama2
+
+# Update config.yaml to use Ollama
+# Set default_provider: "ollama"
 ```
+
+**Option B: Use Cloud API (OpenRouter/OpenAI/Anthropic)**
+```bash
+# Set your API key as environment variable
+export OPENROUTER_API_KEY="your-api-key-here"
+
+# Or edit config.yaml with your API credentials
+```
+
+**See [OLLAMA_INTEGRATION_GUIDE.md](OLLAMA_INTEGRATION_GUIDE.md) for detailed local LLM setup**
 
 #### Step 5: Verify Installation
 ```bash
