@@ -531,10 +531,10 @@ python -m src.threatgpt.cli.main llm test-providers
 - [Developer Guide](CONTRIBUTING.md)
 
 ### **Development Tools**
-- [GitHub Repository](https://github.com/2abet/ThreatGpt)
-- [Issues & Project Board](https://github.com/2abet/ThreatGpt/issues)
-- [CI/CD Pipeline](https://github.com/2abet/ThreatGpt/actions)
-- [Code Coverage Reports](https://codecov.io/gh/2abet/ThreatGpt)
+- [GitHub Repository](https://github.com/Thundastormgod/ThreatGpt)
+- [Issues & Project Board](https://github.com/Thundastormgod/ThreatGpt/issues)
+- [CI/CD Pipeline](https://github.com/Thundastormgod/ThreatGpt/actions)
+- [Code Coverage Reports](https://codecov.io/gh/Thundastormgod/ThreatGpt)
 
 ### **Communication Channels**
 - **Email**: okino007@gmail.com

@@ -451,7 +451,7 @@ class OpenRouterProviderAdapter(BaseLLMProvider):
         
         headers = {
             "Authorization": f"Bearer {self.api_key}",
-            "HTTP-Referer": "https://github.com/2abet/ThreatGpt",
+            "HTTP-Referer": "https://github.com/Thundastormgod/ThreatGpt",
             "X-Title": "ThreatGPT",
             "Content-Type": "application/json"
         }

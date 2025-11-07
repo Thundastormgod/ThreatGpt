@@ -2,7 +2,7 @@
 
 **Review Date**: November 5, 2025  
 **Reviewer**: GitHub Copilot Workspace  
-**Repository**: 2abet/ThreatGpt
+**Repository**: Thundastormgod/ThreatGpt
 
 ---
 
@@ -33,8 +33,8 @@ The following issues were identified and fixed during this review:
 
 2. **Consistency: Updated Repository URLs** (HIGH)
    - **Locations**: README.md, pyproject.toml, config.yaml, and multiple source files
-   - **Issue**: Inconsistent repository URLs (threatgpt/threatgpt, Thundastormgod/ThreatGpt)
-   - **Fix**: Standardized to correct URL `2abet/ThreatGpt`
+   - **Issue**: Inconsistent repository URLs (threatgpt/threatgpt, 2abet/ThreatGpt)
+   - **Fix**: Standardized to correct URL `Thundastormgod/ThreatGpt`
    - **Impact**: Ensures all links point to the correct repository
 
 3. **Documentation: Added Missing Docstrings** (MEDIUM)
@@ -376,8 +376,8 @@ The following issues were identified and fixed during this review:
 
 This review was conducted to help improve the ThreatGPT project. If you have questions or would like to discuss any of these suggestions, please:
 
-1. Open an issue on GitHub: https://github.com/2abet/ThreatGpt/issues
-2. Create a discussion: https://github.com/2abet/ThreatGpt/discussions
+1. Open an issue on GitHub: https://github.com/Thundastormgod/ThreatGpt/issues
+2. Create a discussion: https://github.com/Thundastormgod/ThreatGpt/discussions
 3. Submit a pull request with improvements
 
 ---

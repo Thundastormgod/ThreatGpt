@@ -287,7 +287,7 @@ threatgpt/
 - **Testing**: Increase test coverage and add edge case testing
 
 ### Feature Requests
-Check our [GitHub Issues](https://github.com/2abet/ThreatGpt/issues) for current feature requests and bug reports.
+Check our [GitHub Issues](https://github.com/Thundastormgod/ThreatGpt/issues) for current feature requests and bug reports.
 
 ## Release Process
 
