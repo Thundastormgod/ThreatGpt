@@ -560,7 +560,9 @@ def _create_deployment_template(name: str):
     console.print(f"[yellow]Creating deployment template: {name}[/yellow]")
     console.print("[dim]Template creation wizard coming soon...[/dim]")
     
-    # TODO: Implement interactive template creation wizard
+    # TODO(feature): Implement interactive template creation wizard
+    # This will provide a guided CLI interface for creating deployment templates
+    # with validation and best practice recommendations. Planned for Week 10.
 
 
 if __name__ == '__main__':
