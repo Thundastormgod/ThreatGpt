@@ -259,6 +259,21 @@ check_*.sh
 quick_*.py
 *_diagnostic.py
 
+# Debug and test files (should not be in production)
+debug_*.py
+test_*.py
+demo_*.py
+*_debug.py
+*_test.py
+test_*.yaml
+test_*.yml
+**/test_*
+**/debug_*
+**/demo_*
+
+# Personal development directory (separate private repo)
+personal_dev/
+
 # Configuration files with secrets
 config/local.yaml
 config/production.yaml
@@ -290,6 +305,7 @@ config/production.yaml
 
 # Allow only enterprise-standard documentation
 !README.md
+!SECURITY.md
 
 # Allow all documentation in docs/ folder
 !docs/**/*.md
