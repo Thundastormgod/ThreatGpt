@@ -227,6 +227,7 @@ config/production.yaml
 !LICENSE
 !CODE_OF_CONDUCT.md
 !SECURITY.md
+!REVIEW_SUGGESTIONS.md
 # Keep architecture and deployment docs for team
 !TECHNICAL_ARCHITECTURE.md
 !PRODUCTION_PLAN.md

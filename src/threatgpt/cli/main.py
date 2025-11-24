@@ -565,7 +565,9 @@ def report(simulation_id: str, format: str, output_file: Optional[str]) -> None:
     if output_file:
         console.print(f"[dim]Output file: {output_file}[/dim]")
     
-    # TODO: Implement report generation
+    # TODO(feature): Implement comprehensive report generation
+    # Will include metrics visualization, simulation analytics, and export formats
+    # (PDF, HTML, JSON). Planned for Week 11 (Analytics & Reporting).
     console.print("[yellow]Report generation feature coming soon![/yellow]")
     console.print("This will be implemented in Week 11 (Analytics & Reporting)")
 
@@ -586,7 +588,10 @@ def safety(check_content: Optional[str], policy: Optional[str]) -> None:
     else:
         console.print("[blue]Safety policy information[/blue]")
     
-    # TODO: Implement safety checking
+    # TODO(feature): Implement safety and compliance checking
+    # Will validate content against ethical guidelines, compliance policies,
+    # and safety rules. Includes content filtering and risk assessment.
+    # Planned for Week 9 (Safety & Ethics Framework).
     console.print("[yellow]Safety checking feature coming soon![/yellow]")
     console.print("This will be implemented in Week 9 (Safety & Ethics Framework)")
 
@@ -601,7 +606,9 @@ def status() -> None:
     status_table.add_column("Status", style="green")
     status_table.add_column("Version", style="white")
     
-    # TODO: Add actual status checks
+    # TODO(enhancement): Add actual health checks for each component
+    # Connect to services and verify they are operational. Check API
+    # connectivity, database status, LLM provider availability, etc.
     status_table.add_row("CLI Interface", "Active", __version__)
     status_table.add_row("Configuration Engine", "Active", "v2.0")
     status_table.add_row("LLM Integration", "Active", "v1.0")
