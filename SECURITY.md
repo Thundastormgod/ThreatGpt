@@ -21,7 +21,7 @@ The ThreatGPT team takes security seriously. We appreciate your efforts to respo
 **IMPORTANT: Do NOT use GitHub Issues for security vulnerabilities**
 
 Instead, please report security vulnerabilities to:
-- **Email**: okino007@gmail.com
+- **Email**: thecommodore30@gmail.com
 - **Subject**: `[SECURITY] ThreatGPT Vulnerability Report`
 
 ### What to Include
@@ -165,7 +165,7 @@ ThreatGPT is designed to comply with:
 ### Contact Information
 
 For security-related questions:
-- **Security Email**: okino007@gmail.com
+- **Security Email**: thecommodore30@gmail.com
 - **General Issues**: [GitHub Issues](https://github.com/Thundastormgod/ThreatGpt/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/Thundastormgod/ThreatGpt/discussions)
 
