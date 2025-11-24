@@ -12,7 +12,7 @@ Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md) to ensure a wel
 
 1. **Fork and Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/ThreatGpt.git
+   git clone https://github.com/thundastormgod/ThreatGpt.git
    cd ThreatGpt
    ```
 
