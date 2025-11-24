@@ -392,8 +392,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - **Documentation**: [https://threatgpt.readthedocs.io](https://threatgpt.readthedocs.io)
-- **Issues**: [GitHub Issues](https://github.com/Thundastormgod/ThreatGpt/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Thundastormgod/ThreatGpt/discussions)
+- **Issues**: [GitHub Issues](https://github.com/Thundastormgod/threatgpt/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Thundastormgod/threatgpt/discussions)
 - **Email**: okino007@gmail.com
 
 ---
