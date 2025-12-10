@@ -486,17 +486,21 @@ class SlackIntegration(BaseIntegration):
         )
     
     async def get_campaign_metrics(self, campaign_id: str) -> CampaignMetrics:
-        """Retrieve campaign metrics from Slack."""
+        """Retrieve campaign metrics from Slack.
+        
+        Note: Slack doesn't provide built-in campaign analytics.
+        Link click tracking requires custom webhook endpoints.
+        Returns baseline metrics from internal tracking only.
+        """
         
         # Slack doesn't have built-in campaign metrics
-        # Would need to track interactions through webhook endpoints
+        # Real implementation would query internal webhook tracking database
         
         return CampaignMetrics(
             campaign_id=campaign_id,
-            # Mock some basic metrics
             emails_sent=0,  # Not applicable for Slack
-            links_clicked=5,  # Track through webhook
-            verification_attempts=2
+            links_clicked=0,  # Requires webhook tracking implementation
+            verification_attempts=0
         )
 
 

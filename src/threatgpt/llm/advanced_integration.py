@@ -527,19 +527,29 @@ Generate the content:"""
 
 # Example usage and testing functions
 async def demonstrate_advanced_techniques():
-    """Demonstrate all advanced prompting techniques."""
+    """Demonstrate all advanced prompting techniques.
     
-    # Mock LLM provider for demonstration
-    class MockLLMProvider:
+    NOTE: This function is for documentation and demonstration purposes only.
+    In production, use a properly configured LLM provider from the providers module.
+    
+    Example with real provider:
+        from threatgpt.llm.providers.openai_provider import OpenAIProvider
+        provider = OpenAIProvider({"api_key": "your-key", "model": "gpt-4"})
+        await provider.initialize()
+    """
+    
+    # Demonstration-only provider (returns placeholder content for testing)
+    class DemoLLMProvider:
+        """Demonstration provider for testing - NOT for production use."""
         async def generate_content(self, prompt, scenario_type, max_tokens=1000, temperature=0.7):
-            class MockResponse:
+            class DemoResponse:
                 def __init__(self):
-                    self.content = f"Generated content using {scenario_type} with {len(prompt)} char prompt"
-            return MockResponse()
+                    self.content = f"[DEMO] Generated content for {scenario_type} scenario"
+            return DemoResponse()
     
     # Initialize system
     advanced_system = AdvancedPromptEngineering()
-    mock_llm = MockLLMProvider()
+    demo_llm = DemoLLMProvider()
     
     # Create test context
     test_context = PromptContext(
@@ -576,7 +586,7 @@ async def demonstrate_advanced_techniques():
             result = await advanced_system.generate_advanced_content(
                 context=test_context,
                 content_type=ContentType.EMAIL_PHISHING,
-                llm_provider=mock_llm,
+                llm_provider=demo_llm,
                 technique=technique
             )
             
